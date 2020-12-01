@@ -3,7 +3,7 @@ package com.dpapazisis.librarian.model.readable;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class PeriodicalTest extends Readable {
+public class PeriodicalTest {
     @Test
     public void emptyClass_ShouldAlwaysFail() {
         Assert.assertTrue(false);
