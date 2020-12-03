@@ -6,6 +6,6 @@ import org.junit.Test;
 public class AuthorTest extends Person {
     @Test
     public void emptyClass_ShouldAlwaysFail() {
-        Assert.assertTrue(false);
+        Assert.fail();
     }
 }

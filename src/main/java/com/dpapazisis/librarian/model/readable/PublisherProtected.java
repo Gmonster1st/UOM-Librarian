@@ -15,7 +15,7 @@ public interface PublisherProtected {
         //TODO: isbn validation should be for both 13 and 10 digit formats
         //        TODO:Logic Implementation
 
-        if (isbn == "") {
+        if (isbn.equals("")) {
             return isbn;
         } else {
             throw new IllegalArgumentException("ISBN should match the 10 or 13 digit formats!");

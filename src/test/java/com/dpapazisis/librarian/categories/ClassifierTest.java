@@ -7,6 +7,6 @@ public class ClassifierTest {
 
     @Test
     public void emptyClass_ShouldAlwaysFail() {
-        Assert.assertTrue(false);
+        Assert.fail();
     }
 }

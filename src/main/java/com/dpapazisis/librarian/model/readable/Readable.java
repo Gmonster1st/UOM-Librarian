@@ -58,7 +58,7 @@ public abstract class Readable {
         return referenceCode;
     }
 
-    protected abstract void setReferenceCode(DeweyCode deweyCode);
+    protected abstract void setReferenceCode();
 
     public boolean isLend() {
         return lendStatus;
@@ -67,22 +67,6 @@ public abstract class Readable {
     public void isReturned() {
         this.lendStatus = false;
     }
-
-//    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) return true;
-//        if (o == null || getClass() != o.getClass()) return false;
-//        Readable readable = (Readable) o;
-//        return getTitle().equals(readable.getTitle()) &&
-//                getYear().equals(readable.getYear()) &&
-//                getReferenceCode().equals(readable.getReferenceCode());
-//    }
-//
-//    @Override
-//    public int hashCode() {
-//        return Objects.hash(getTitle(), getYear(), getReferenceCode());
-//    }
-
 
     @Override
     public boolean equals(Object o) {

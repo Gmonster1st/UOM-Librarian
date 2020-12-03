@@ -1,7 +1,6 @@
 package com.dpapazisis.librarian.model.readable;
 
 import com.dpapazisis.librarian.categories.Classifier;
-import com.dpapazisis.librarian.categories.DeweyCode;
 import com.dpapazisis.librarian.model.person.Author;
 import com.dpapazisis.librarian.model.publisher.Publisher;
 
@@ -11,19 +10,19 @@ import java.util.List;
 
 import static com.dpapazisis.librarian.model.readable.PublisherProtected.validateISBN;
 
-public class Book extends Readable implements PublisherProtected {
+public final class Book extends Readable implements PublisherProtected {
     private static final int MAX_AUTHORS = 5;
 
     private String isbn;
     private Publisher publisher;
-    private List<Author> authors;
+    private final List<Author> authors;
 
     private Book(Builder builder) {
         super(builder.title, builder.year, builder.pages);
         this.isbn = builder.isbn;
         this.publisher = builder.publisher;
         this.authors = builder.authors;
-        setReferenceCode(Classifier.generateDeweyCode(this));
+        setReferenceCode();
     }
 
     @Override
@@ -78,8 +77,8 @@ public class Book extends Readable implements PublisherProtected {
     }
 
     @Override
-    protected void setReferenceCode(DeweyCode deweyCode) {
-        this.referenceCode = deweyCode;
+    protected void setReferenceCode() {
+        this.referenceCode = Classifier.generateDeweyCode(this);
     }
 
     public static class Builder extends ReadableBuilder {
@@ -96,7 +95,7 @@ public class Book extends Readable implements PublisherProtected {
             return this;
         }
 
-        public Builder authors(List<Author> authors) throws IllegalArgumentException {
+        public Builder withAuthors(List<Author> authors) throws IllegalArgumentException {
             if (authors.size() > MAX_AUTHORS) {
                 throw new IllegalArgumentException("Authors should not exceed the number of 5!");
             }

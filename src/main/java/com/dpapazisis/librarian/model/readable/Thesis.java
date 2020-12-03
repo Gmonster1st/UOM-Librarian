@@ -1,16 +1,123 @@
 package com.dpapazisis.librarian.model.readable;
 
-import com.dpapazisis.librarian.categories.DeweyCode;
+import com.dpapazisis.librarian.categories.Classifier;
+import com.dpapazisis.librarian.model.person.Author;
+import com.dpapazisis.librarian.model.person.Professor;
 
 import java.time.Year;
+import java.util.Locale;
 
-public class Thesis extends Readable {
-    protected Thesis(String title, Year year, int pages) {
-        super(title, year, pages);
+public final class Thesis extends Readable {
+    private Author author;
+    private Professor supervisor;
+    private ThesisType type;
+    private String university;
+    private String department;
+
+    private Thesis(Builder builder) {
+        super(builder.title, builder.year, builder.pages);
+        this.author = builder.author;
+        this.supervisor = builder.supervisor;
+        this.type = builder.type;
+        this.university = builder.university;
+        this.department = builder.department;
+        setReferenceCode();
+    }
+
+    public Author getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(Author author) {
+        this.author = author;
+    }
+
+    public Professor getSupervisor() {
+        return supervisor;
+    }
+
+    public void setSupervisor(Professor supervisor) {
+        this.supervisor = supervisor;
+    }
+
+    public ThesisType getType() {
+        return type;
+    }
+
+    public void setType(ThesisType type) {
+        this.type = type;
+    }
+
+    public String getUniversity() {
+        return university;
+    }
+
+    public void setUniversity(String university) {
+        this.university = university;
+    }
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
     }
 
     @Override
-    protected void setReferenceCode(DeweyCode deweyCode) {
+    protected void setReferenceCode() {
+        this.referenceCode = Classifier.generateDeweyCode(this);
+    }
 
+    @Override
+    public String toString() {
+        return super.toString() +
+                "author=" + author +
+                ", supervisor=" + supervisor +
+                ", type=" + type.name().toLowerCase(Locale.ROOT) +
+                ", department='" + department + '\'' +
+                ", university='" + university + '\'';
+    }
+
+    public static class Builder extends ReadableBuilder {
+        private Author author;
+        private Professor supervisor;
+        private ThesisType type;
+        private String university;
+        private String department;
+
+        public Builder(String title, Year year, int pages) {
+            super(title, year, pages);
+        }
+
+        public Builder withAuthor(Author author) {
+            this.author = author;
+            return this;
+        }
+
+        public Builder withSupervisor(Professor professor) {
+            this.supervisor = professor;
+            return this;
+        }
+
+        public Builder ofType(ThesisType type) {
+            this.type = type;
+            return this;
+        }
+
+        public Builder fromUniversity(String university) {
+            this.university = university;
+            return this;
+        }
+
+        public Builder andDepartment(String department) {
+            this.department = department;
+            return this;
+        }
+
+        @Override
+        public Thesis build() {
+            return new Thesis(this);
+        }
     }
 }
