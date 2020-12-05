@@ -1,9 +1,11 @@
 package com.dpapazisis.librarian.model.readable;
 
 import com.dpapazisis.librarian.categories.Classifier;
+import com.dpapazisis.librarian.categories.Subject;
 import com.dpapazisis.librarian.model.publisher.Publisher;
 
 import java.time.Year;
+import java.util.Objects;
 
 import static com.dpapazisis.librarian.model.readable.PublisherProtected.validateISBN;
 
@@ -14,7 +16,7 @@ public final class Periodical extends Readable implements PublisherProtected {
     private int issue;
 
     private Periodical(Builder builder) {
-        super(builder.title, builder.year, builder.pages);
+        super(builder.title, builder.year, builder.pages, builder.subject );
         this.isbn = builder.isbn;
         this.publisher = builder.publisher;
         this.volume = builder.volume;
@@ -64,6 +66,20 @@ public final class Periodical extends Readable implements PublisherProtected {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        Periodical that = (Periodical) o;
+        return getVolume() == that.getVolume() && getIssue() == that.getIssue() && isbn.equals(that.isbn) && getPublisher().equals(that.getPublisher());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), isbn, getPublisher(), getVolume(), getIssue());
+    }
+
+    @Override
     public String toString() {
         return super.toString() +
                 "isbn='" + isbn + '\'' +
@@ -78,8 +94,8 @@ public final class Periodical extends Readable implements PublisherProtected {
         private int volume;
         private int issue;
 
-        public Builder(String title, Year year, int pages) {
-            super(title, year, pages);
+        public Builder(String title, Year year, int pages, Subject subject) {
+            super(title, year, pages, subject);
         }
 
         public Builder withISBN(String isbn) {

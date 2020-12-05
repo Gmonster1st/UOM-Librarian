@@ -1,0 +1,621 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.3.0">
+  <help_text/>
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>0</x>
+      <y>60</y>
+      <w>350</w>
+      <h>470</h>
+    </coordinates>
+    <panel_attributes>/com.uom.librarian.model.readable::Readable/
+
+--
+- title : String
+- year : Year
+- pages : int
+- copies : int
+- referenceCode : DeweyCode
+- lendStatus : boolean
+--
+# Readable(String title, Year year, int pages, int copies, DeweyCode reference) : ctor
+
++ getTitle(): String
++ setTitle(String title): void
++ getYear(): Year
++ setYear(Year year): void
++ getPages(): int
++ setPages(int pages): void
++ getCopies(): int
++ setCopies(int copies): void
++ getReferenceCode(): DeweyCode
+/+ generateReferenceCode(): void/
++ isReturned(): void
++ isLent(): boolean
+
++ hashCode(): int &lt;&lt;override&gt;&gt;
++ equals(Object obj): boolean &lt;&lt;override&gt;&gt;
+
++ toString: String &lt;&lt;override&gt;&gt;
+style=wordwrap</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLInterface</id>
+    <coordinates>
+      <x>1780</x>
+      <y>20</y>
+      <w>360</w>
+      <h>140</h>
+    </coordinates>
+    <panel_attributes>com.uom.librarian.model.readable::PublisherProtected
+--
+getISBN(): String
+setISBN(String isbn): void
+getPublisher(): Publisher
+setPublisher(Publisher publisher): void
+--</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1760</x>
+      <y>720</y>
+      <w>30</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>lt=(+)-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;70.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1600</x>
+      <y>430</y>
+      <w>330</w>
+      <h>300</h>
+    </coordinates>
+    <panel_attributes>com.uom.librarian.model.readable::Book
+--
+- static final int MAX_AUTHORS = 5
+- isbn : String
+- publisher : Publisher
+- authors : List&lt;Author&gt;
+--
+- Book(Builder builder): ctor
+
++ getISBN(): String
++ setISBN(String isbn): void
++ getPublisher(): Publisher
++ setPublisher(Publisher publisher): void
++ getAuthors(): Array&lt;Author)
++ getNumberOfAuthors(): int
++ addAuthor(Author author): boolean
+
++ toString: String &lt;&lt;override&gt;&gt;</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>2390</x>
+      <y>630</y>
+      <w>360</w>
+      <h>180</h>
+    </coordinates>
+    <panel_attributes>/com.uom.librarian.model.readable::ReadableBuilder/
+--
+# title : String
+# year : Year
+# pages : int
+# copies : int
+# reference : DeweyCode
+--
+# ReadableBulder(String title, Year year, int pages, int copies, DeweyCode reference) : ctor
+
++ public abstract Readable build(): 
+style=wordwrap</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1600</x>
+      <y>790</y>
+      <w>330</w>
+      <h>270</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;static&gt;&gt;
+Builder
+--
+- isbn : String
+- publisher : Publisher
+- authors : List&lt;Author&gt;
+--
++ Builder((String title, Year year, int pages, int copies, DeweyCode reference) : ctor
+
++ isbn(String string): Builder
++ publisher(Publisher publisher): Builder
++ authors(Author...auth): Builder
+
++ build(): Book &lt;override&gt;&gt;
+style=wordwrap</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>340</x>
+      <y>320</y>
+      <w>1390</w>
+      <h>130</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;1370.0;10.0;1370.0;110.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>2020</x>
+      <y>430</y>
+      <w>330</w>
+      <h>300</h>
+    </coordinates>
+    <panel_attributes>com.uom.librarian.model.readable::Periodical
+--
+- isbn : String
+- publisher : Publisher
+- volume : int
+- issue : int
+--
+- Periodical(Builder builder): ctor
+
++ getISBN(): String
++ setISBN(String isbn): void
++ getPublisher(): Publisher
++ setPublisher(Publisher publisher): void
++ getVolume(): int
++ setVolume(int volume): void
++ getIssue(): int
++ setIssue(int issue): void
+
++ toString: String &lt;&lt;override&gt;&gt;</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>340</x>
+      <y>0</y>
+      <w>1850</w>
+      <h>450</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;310.0;1370.0;310.0;1370.0;10.0;1830.0;10.0;1830.0;430.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1760</x>
+      <y>30</y>
+      <w>210</w>
+      <h>420</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>190.0;10.0;10.0;10.0;10.0;400.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1960</x>
+      <y>30</y>
+      <w>200</w>
+      <h>420</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>10.0;10.0;180.0;10.0;180.0;400.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>370</x>
+      <y>410</y>
+      <w>320</w>
+      <h>280</h>
+    </coordinates>
+    <panel_attributes>com.uom.librarian.model.readable::Thesis
+--
+- author : Author
+- supervisor : Professor
+- type : ThesisTypeEnum
+- department : String
+- university : String
+--
+- Thesis(Builder builder): ctor
+
++ getAuthor(): Author
++ setAuthor(Author author): void
++ getSupervisor(): Professor
++ setSupervisor(Professor professor): void
++ getDepartment(): String
++ setDepartment(String department): void
+
++ toString: String &lt;&lt;override&gt;&gt;
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>340</x>
+      <y>340</y>
+      <w>170</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;150.0;10.0;150.0;70.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>2140</x>
+      <y>720</y>
+      <w>30</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>lt=(+)-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;70.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>370</x>
+      <y>760</y>
+      <w>310</w>
+      <h>300</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;static&gt;&gt;
+Builder
+--
+- author : Author
+- supervisor : Professor
+- type : ThesisTypeEnum
+- department : String
+- university : String
+--
++ Builder((String title, Year year, int pages, int copies, DeweyCode reference) : ctor
+
++ author(Author author): Builder
++ supervisor(Professor professor): Builder
++ type(ThesisTypeEnum type): Builder
++ department(String department): Builder
++ university(String univerisity): Builder
+
++ build(): Thesis &lt;override&gt;&gt;
+style=wordwrap</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>2020</x>
+      <y>790</y>
+      <w>330</w>
+      <h>270</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;static&gt;&gt;
+Builder
+--
+- isbn : String
+- publisher : Publisher
+- volume : int
+- issue : int
+--
++ Builder((String title, Year year, int pages, int copies, DeweyCode reference) : ctor
+
++ isbn(String string): Builder
++ publisher(Publisher publisher): Builder
++ volume(int volume): Builder
++ issue(int issue): Builder
+
++ build(): Periodical &lt;override&gt;&gt;
+style=wordwrap</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>480</x>
+      <y>680</y>
+      <w>30</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>lt=(+)-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;80.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>2210</x>
+      <y>800</y>
+      <w>250</w>
+      <h>300</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>230.0;10.0;230.0;280.0;10.0;280.0;10.0;260.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>480</x>
+      <y>800</y>
+      <w>2020</w>
+      <h>340</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>2000.0;10.0;2000.0;320.0;10.0;320.0;10.0;260.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1760</x>
+      <y>800</y>
+      <w>720</w>
+      <h>320</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>700.0;10.0;700.0;300.0;10.0;300.0;10.0;260.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>100</x>
+      <y>790</y>
+      <w>220</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>Because the classes end up 
+with too many constructor
+parameters I desided to use the
+builder pattern</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1190</x>
+      <y>880</y>
+      <w>340</w>
+      <h>210</h>
+    </coordinates>
+    <panel_attributes>com.uom.librarian.model.person::Author
+--
+- numberOfBooks : int
+- publishers : List&lt;Publisher&gt;
+--
+
++ getNumberOfBooks(): int
++ setNumberOfBooks(int books): void //Not Sure for the param
+
++ addPublisher(Publisher publisher): boolean
++ removePublisher(Publisher publisher): boolean
+--
+style=wordwrap</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>500</x>
+      <y>0</y>
+      <w>310</w>
+      <h>230</h>
+    </coordinates>
+    <panel_attributes>com.uom.librarian.categories::DeweyCode
+--
+- category : String
+- referenceCode : String
+--
+# DeweyCode(String name, String referenceCode): ctor
+
++ getName(): String
++ getReferenceCode(): String
+
++ hashCode(): int &lt;&lt;override&gt;&gt;
++ equals(Object obj): boolean &lt;&lt;override&gt;&gt;
+
++ toString: String &lt;&lt;override&gt;&gt;
+style=wordwrap</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>340</x>
+      <y>80</y>
+      <w>180</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;100.0;120.0;100.0;120.0;10.0;160.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1430</x>
+      <y>500</y>
+      <w>190</w>
+      <h>400</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>170.0;10.0;10.0;10.0;10.0;380.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>680</x>
+      <y>430</y>
+      <w>730</w>
+      <h>470</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;710.0;10.0;710.0;450.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1800</x>
+      <y>180</y>
+      <w>320</w>
+      <h>220</h>
+    </coordinates>
+    <panel_attributes>com.dpapazisis.librarian.model.publisher::Publisher
+--
+- name : String
+- website : URL
+- email: String
+--
++ Publisher(String name): ctor
+
++ getName(): String
++ setName(String name): void
++ getWebsite(): URL
++ setWebsite(URL url): void
++ getEmail(): String
++ setEmail(String email): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1920</x>
+      <y>390</y>
+      <w>60</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;100.0;40.0;100.0;40.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1970</x>
+      <y>390</y>
+      <w>70</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>50.0;90.0;10.0;90.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1520</x>
+      <y>390</y>
+      <w>470</w>
+      <h>560</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;540.0;50.0;540.0;50.0;370.0;450.0;370.0;450.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>750</x>
+      <y>880</y>
+      <w>370</w>
+      <h>190</h>
+    </coordinates>
+    <panel_attributes>com.uom.librarian.model.person::Professor
+--
+
+
+
+
+
+
+
+
+
+--</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>890</x>
+      <y>490</y>
+      <w>420</w>
+      <h>290</h>
+    </coordinates>
+    <panel_attributes>/com.uom.librarian.model.person::Person/
+--
+- name : String
+- surname : String
+- birthDate : LocalDate
+- shortBio : String
+- email : String
+--
++ Person(String name, String surname, LocalDate birthDate): ctor
+
++ getName(): String
++ getSurname(): String
++ getBirthDate(): LocalDate
++ setShortBio(String shortBio): void
++ getShortBio(): String
+
++ hashCode(): int &lt;&lt;override&gt;&gt;
++ equals(Object obj): boolean &lt;&lt;override&gt;&gt;</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1050</x>
+      <y>770</y>
+      <w>30</w>
+      <h>130</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;110.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1240</x>
+      <y>770</y>
+      <w>30</w>
+      <h>130</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;110.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>880</x>
+      <y>0</y>
+      <w>460</w>
+      <h>250</h>
+    </coordinates>
+    <panel_attributes>com.uom.librarian.categories::Classifier
+--
+
+
+
+
+
+
+
+
+
+
+
+
+--</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>

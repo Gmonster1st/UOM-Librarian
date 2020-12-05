@@ -1,11 +1,13 @@
 package com.dpapazisis.librarian.model.readable;
 
 import com.dpapazisis.librarian.categories.Classifier;
+import com.dpapazisis.librarian.categories.Subject;
 import com.dpapazisis.librarian.model.person.Author;
 import com.dpapazisis.librarian.model.person.Professor;
 
 import java.time.Year;
 import java.util.Locale;
+import java.util.Objects;
 
 public final class Thesis extends Readable {
     private Author author;
@@ -15,7 +17,7 @@ public final class Thesis extends Readable {
     private String department;
 
     private Thesis(Builder builder) {
-        super(builder.title, builder.year, builder.pages);
+        super(builder.title, builder.year, builder.pages, builder.subject);
         this.author = builder.author;
         this.supervisor = builder.supervisor;
         this.type = builder.type;
@@ -70,6 +72,20 @@ public final class Thesis extends Readable {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        Thesis thesis = (Thesis) o;
+        return getAuthor().equals(thesis.getAuthor()) && getSupervisor().equals(thesis.getSupervisor()) && getType() == thesis.getType() && getUniversity().equals(thesis.getUniversity()) && getDepartment().equals(thesis.getDepartment());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), getAuthor(), getSupervisor(), getType(), getUniversity(), getDepartment());
+    }
+
+    @Override
     public String toString() {
         return super.toString() +
                 "author=" + author +
@@ -86,8 +102,8 @@ public final class Thesis extends Readable {
         private String university;
         private String department;
 
-        public Builder(String title, Year year, int pages) {
-            super(title, year, pages);
+        public Builder(String title, Year year, int pages, Subject subject) {
+            super(title, year, pages, subject);
         }
 
         public Builder withAuthor(Author author) {

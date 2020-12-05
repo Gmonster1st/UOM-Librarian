@@ -1,6 +1,7 @@
 package com.dpapazisis.librarian.model.readable;
 
 import com.dpapazisis.librarian.categories.DeweyCode;
+import com.dpapazisis.librarian.categories.Subject;
 
 import java.time.Year;
 import java.util.Objects;
@@ -10,14 +11,17 @@ public abstract class Readable {
     private Year year;
     private int pages;
     private int copies; //Might not be used like that
+    protected final Subject subject;
     protected DeweyCode referenceCode;
     private boolean lendStatus;
+    private String copyId = "00";   //TODO: Implement a way to generate the copy Id
 
-    protected Readable(String title, Year year, int pages) {
+    protected Readable(String title, Year year, int pages, Subject subject) {
         this.title = title;
         this.year = year;
         this.pages = pages;
         this.lendStatus = false;
+        this.subject = subject;
     }
 
     public String getTitle() {
@@ -33,7 +37,14 @@ public abstract class Readable {
     }
 
     public void setYear(Year year) {
-        this.year = year;
+        this.year = validYear(year);
+    }
+
+    private Year validYear(Year year) {
+        if (year.getValue() > Year.now().getValue()) {
+            throw new IllegalArgumentException("The Year of the Item can not be later than the current Year!");
+        }
+        return year;
     }
 
     public int getPages() {
@@ -41,7 +52,14 @@ public abstract class Readable {
     }
 
     public void setPages(int pages) {
-        this.pages = pages;
+        this.pages = validPages(pages);
+    }
+
+    private int validPages(int pages) {
+        if (pages <= 0) {
+            throw new IllegalArgumentException("The items pages can not be zero or less!");
+        }
+        return pages;
     }
 
     //region Field is still in debate
@@ -53,6 +71,11 @@ public abstract class Readable {
         this.copies = copies;
     }
     //endregion
+
+
+    public Subject getSubject() {
+        return subject;
+    }
 
     public DeweyCode getReferenceCode() {
         return referenceCode;
@@ -66,6 +89,10 @@ public abstract class Readable {
 
     public void isReturned() {
         this.lendStatus = false;
+    }
+
+    public String getCopyId() {
+        return copyId;
     }
 
     @Override

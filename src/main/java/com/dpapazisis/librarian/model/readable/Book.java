@@ -1,12 +1,14 @@
 package com.dpapazisis.librarian.model.readable;
 
 import com.dpapazisis.librarian.categories.Classifier;
+import com.dpapazisis.librarian.categories.Subject;
 import com.dpapazisis.librarian.model.person.Author;
 import com.dpapazisis.librarian.model.publisher.Publisher;
 
 import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static com.dpapazisis.librarian.model.readable.PublisherProtected.validateISBN;
 
@@ -18,7 +20,7 @@ public final class Book extends Readable implements PublisherProtected {
     private final List<Author> authors;
 
     private Book(Builder builder) {
-        super(builder.title, builder.year, builder.pages);
+        super(builder.title, builder.year, builder.pages, builder.subject);
         this.isbn = builder.isbn;
         this.publisher = builder.publisher;
         this.authors = builder.authors;
@@ -49,6 +51,10 @@ public final class Book extends Readable implements PublisherProtected {
         return authors;
     }
 
+    public Author getAuthorAt(int index) {
+        return authors.get(index);
+    }
+
     public boolean addAuthor(Author author) {
         if (authors.size() != MAX_AUTHORS) {
             authors.add(author);
@@ -59,13 +65,27 @@ public final class Book extends Readable implements PublisherProtected {
     }
 
     public void removeAuthor(Author author) {
-        if (authors.size() != 0) {
+        if (!authors.isEmpty()) {
             authors.remove(author);
         }
     }
 
     public int getNumberOfAuthors() {
         return authors.size();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        Book book = (Book) o;
+        return isbn.equals(book.isbn) && getPublisher().equals(book.getPublisher()) && getAuthors().equals(book.getAuthors());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), isbn, getPublisher(), getAuthors());
     }
 
     @Override
@@ -86,8 +106,8 @@ public final class Book extends Readable implements PublisherProtected {
         private Publisher publisher;
         private List<Author> authors = new ArrayList<>(5);
 
-        public Builder(String title, Year year, int pages) {
-            super(title, year, pages);
+        public Builder(String title, Year year, int pages, Subject subject) {
+            super(title, year, pages, subject);
         }
 
         public Builder withISBN(String isbn) {
@@ -95,11 +115,16 @@ public final class Book extends Readable implements PublisherProtected {
             return this;
         }
 
-        public Builder withAuthors(List<Author> authors) throws IllegalArgumentException {
+        public Builder withAuthors(List<Author> authors) {
             if (authors.size() > MAX_AUTHORS) {
                 throw new IllegalArgumentException("Authors should not exceed the number of 5!");
             }
             this.authors = authors;
+            return this;
+        }
+
+        public Builder withAuthor(Author author) {
+            authors.add(author);
             return this;
         }
 
