@@ -1,9 +1,17 @@
+/*
+ * Copyright (c) 2020.
+ * Dimitrios Papazisis
+ * This Software is to be used for educational purposes only.
+ * All rights Reserved.
+ */
+
 package com.dpapazisis.librarian.categories;
 
 import com.dpapazisis.librarian.model.readable.Book;
 import com.dpapazisis.librarian.model.readable.Periodical;
 import com.dpapazisis.librarian.model.readable.Readable;
 import com.dpapazisis.librarian.model.readable.Thesis;
+//TODO:Documentation
 
 public class Classifier {
     private static final String BOOK = "Book";

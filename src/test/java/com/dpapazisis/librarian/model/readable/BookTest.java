@@ -21,23 +21,28 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 public class BookTest {
 
+    public static final String TITLE = "TestTitle";
+    public static final Year YEAR = Year.parse("2020");
+    public static final int PAGES = 500;
+
+    private static URL url;
     private Book book;
     private static Subject subject;
 
     @BeforeClass
     public static void setupForAll() {
-        subject = new Subject("ComputerScience", "100");
-    }
-
-    @Before
-    public void setup() {
-        URL url = null;
+        url = null;
         try {
             url = new URL("http://www.example.com");
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
-        book = new Book.Builder("TestTitle", Year.parse("2020"), 500, subject)
+        subject = new Subject("ComputerScience", "100");
+    }
+
+    @Before
+    public void setup() {
+        book = new Book.Builder(TITLE, YEAR, PAGES, subject)
                 .andPublisher(new Publisher("Editions", url, "edit@myeditions.com"))
                 .build();
     }
@@ -70,7 +75,7 @@ public class BookTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void onNewBookBuilder_GivenMoreAuthorsThan5_ThrowsIllegalArgumentException() {
-        new Book.Builder("TestTitle", Year.parse("2010"), 100, subject)
+        new Book.Builder(TITLE, Year.parse("2010"), 100, subject)
                 .withAuthors(new ArrayList<>(Arrays.asList(
                         new Author("TestName1", "Surname1", LocalDate.parse("1982-12-29")),
                         new Author("TestName2", "Surname2", LocalDate.parse("1980-12-29")),
@@ -93,5 +98,19 @@ public class BookTest {
     @Test
     public void getNumberOfAuthors_OnCalled_ReturnsTheNumberOfAuthors() {
         assertThat(book.getNumberOfAuthors(), is(0));
+    }
+
+    @Test
+    public void build_GivenMultipleCopies_ReturnsObjectsWithIndividualCopyId() {
+        var books = new Book.Builder(TITLE, YEAR, PAGES, subject)
+                .withAuthor(new Author("TestName1", "Surname1", LocalDate.parse("1982-12-29")))
+                .andPublisher(new Publisher("Editions", url, "edit@myeditions.com"))
+                .build(3);
+
+        for (int i = 0; i < 3; i++) {
+            var book = books.get(i);
+            assertThat(book.getCopyId(), is(equalTo("0" + i)));
+            System.out.println(book.getTitle() + " - "+ book.getCopyId());
+        }
     }
 }

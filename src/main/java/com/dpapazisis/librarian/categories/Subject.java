@@ -1,6 +1,14 @@
+/*
+ * Copyright (c) 2020.
+ * Dimitrios Papazisis
+ * This Software is to be used for educational purposes only.
+ * All rights Reserved.
+ */
+
 package com.dpapazisis.librarian.categories;
 
 import java.util.Objects;
+//TODO:Documentation
 
 public class Subject {
     private final String name;

@@ -1,8 +1,16 @@
+/*
+ * Copyright (c) 2020.
+ * Dimitrios Papazisis
+ * This Software is to be used for educational purposes only.
+ * All rights Reserved.
+ */
+
 package com.dpapazisis.librarian.model.readable;
 
 import com.dpapazisis.librarian.model.publisher.Publisher;
 
 import java.util.regex.Pattern;
+//TODO:Documentation
 
 public interface PublisherProtected {
     String getISBN();

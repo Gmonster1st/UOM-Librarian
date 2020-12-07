@@ -71,4 +71,17 @@ public class ClassifierTest {
         assertThat(Classifier.generateDeweyCode(thesis),
                 is(equalTo(new DeweyCode(subject.getName(), "100.00 DIP"))));
     }
+
+    @Test
+    public void generateDeweyCode_WhenMultipleCopies_GeneratesProperCode() {
+        var magazines = new Periodical.Builder(TITLE, YEAR, PAGES, subject)
+                .andPublisher(publisher)
+                .build(3);
+
+        for (int i = 0; i < 3; i++) {
+            var magazine = magazines.get(i);
+            System.out.println(magazine.getReferenceCode().toString());
+            assertThat(magazine.getReferenceCode().getReferenceCode(), is(equalTo("100.0" + i + " TEE")));
+        }
+    }
 }

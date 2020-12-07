@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2020.
+ * Dimitrios Papazisis
+ * This Software is to be used for educational purposes only.
+ * All rights Reserved.
+ */
+
 package com.dpapazisis.librarian.model.readable;
 
 import com.dpapazisis.librarian.categories.Classifier;
@@ -7,11 +14,22 @@ import com.dpapazisis.librarian.model.publisher.Publisher;
 
 import java.time.Year;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
 import static com.dpapazisis.librarian.model.readable.PublisherProtected.validateISBN;
 
+/**
+ * Book type that extends {@link Readable} and hold the data for a Book object
+ * Use of Book constructor is restricted please utilize the inner {@link Builder} class.
+ * <p>
+ * Usage example:<br>
+ * <pre>
+ * <code>new Book.Builder(title,year,pages,subject).build();</code>
+ * </pre>
+ * </p>
+ */
 public final class Book extends Readable implements PublisherProtected {
     private static final int MAX_AUTHORS = 5;
 
@@ -19,6 +37,18 @@ public final class Book extends Readable implements PublisherProtected {
     private Publisher publisher;
     private final List<Author> authors;
 
+    /**
+     * Usage of the Constructor is restricted, please use the inner {@link Builder} class
+     *
+     * @param builder {@link Builder}
+     *
+     *                <p>
+     *                Usage example:<br>
+     *                <pre>
+     *                 <code>new Book.Builder(title,year,pages,subject).build();</code>
+     *                 </pre>
+     *                </p>
+     */
     private Book(Builder builder) {
         super(builder.title, builder.year, builder.pages, builder.subject);
         this.isbn = builder.isbn;
@@ -26,7 +56,7 @@ public final class Book extends Readable implements PublisherProtected {
         this.authors = builder.authors;
         setReferenceCode();
     }
-
+//TODO:Documentation
     @Override
     public String getISBN() {
         return this.isbn;
@@ -136,6 +166,18 @@ public final class Book extends Readable implements PublisherProtected {
         @Override
         public Book build() {
             return new Book(this);
+        }
+
+        @Override
+        public List<Readable> build(int copies) {
+            List<Readable> multipleCopies = new LinkedList<>();
+            for (int i = 0; i < copies; i++) {
+                var book = new Book(this);
+                book.setCopyId((i < 10) ? "0" + i : String.valueOf(i));
+                book.setReferenceCode();
+                multipleCopies.add(book);
+            }
+            return multipleCopies;
         }
     }
 }

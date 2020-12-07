@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2020.
+ * Dimitrios Papazisis
+ * This Software is to be used for educational purposes only.
+ * All rights Reserved.
+ */
+
 package com.dpapazisis.librarian.model.readable;
 
 import com.dpapazisis.librarian.categories.Classifier;
@@ -5,9 +12,12 @@ import com.dpapazisis.librarian.categories.Subject;
 import com.dpapazisis.librarian.model.publisher.Publisher;
 
 import java.time.Year;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Objects;
 
 import static com.dpapazisis.librarian.model.readable.PublisherProtected.validateISBN;
+//TODO:Documentation
 
 public final class Periodical extends Readable implements PublisherProtected {
     private String isbn;
@@ -16,7 +26,7 @@ public final class Periodical extends Readable implements PublisherProtected {
     private int issue;
 
     private Periodical(Builder builder) {
-        super(builder.title, builder.year, builder.pages, builder.subject );
+        super(builder.title, builder.year, builder.pages, builder.subject);
         this.isbn = builder.isbn;
         this.publisher = builder.publisher;
         this.volume = builder.volume;
@@ -121,6 +131,18 @@ public final class Periodical extends Readable implements PublisherProtected {
         @Override
         public Periodical build() {
             return new Periodical(this);
+        }
+
+        @Override
+        public List<Readable> build(int copies) {
+            List<Readable> multipleCopies = new LinkedList<>();
+            for (int i = 0; i < copies; i++) {
+                var periodical = new Periodical(this);
+                periodical.setCopyId((i < 10) ? "0" + i : String.valueOf(i));
+                periodical.setReferenceCode();
+                multipleCopies.add(periodical);
+            }
+            return multipleCopies;
         }
     }
 }

@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2020.
+ * Dimitrios Papazisis
+ * This Software is to be used for educational purposes only.
+ * All rights Reserved.
+ */
+
 package com.dpapazisis.librarian.model.readable;
 
 import com.dpapazisis.librarian.categories.Classifier;
@@ -6,8 +13,11 @@ import com.dpapazisis.librarian.model.person.Author;
 import com.dpapazisis.librarian.model.person.Professor;
 
 import java.time.Year;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
+//TODO:Documentation
 
 public final class Thesis extends Readable {
     private Author author;
@@ -134,6 +144,18 @@ public final class Thesis extends Readable {
         @Override
         public Thesis build() {
             return new Thesis(this);
+        }
+
+        @Override
+        public List<Readable> build(int copies) {
+            List<Readable> multipleCopies = new LinkedList<>();
+            for (int i = 0; i < copies; i++) {
+                var thesis = new Thesis(this);
+                thesis.setCopyId((i < 10) ? "0" + i : String.valueOf(i));
+                thesis.setReferenceCode();
+                multipleCopies.add(thesis);
+            }
+            return multipleCopies;
         }
     }
 }

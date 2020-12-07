@@ -1,9 +1,17 @@
+/*
+ * Copyright (c) 2020.
+ * Dimitrios Papazisis
+ * This Software is to be used for educational purposes only.
+ * All rights Reserved.
+ */
+
 package com.dpapazisis.librarian.model.publisher;
 
 import com.dpapazisis.librarian.utils.Validator;
 
 import java.net.URL;
 import java.util.Objects;
+//TODO:Documentation
 
 public class Publisher {
     private final String name;

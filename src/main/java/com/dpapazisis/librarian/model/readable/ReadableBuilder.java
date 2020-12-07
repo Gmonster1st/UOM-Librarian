@@ -1,8 +1,17 @@
+/*
+ * Copyright (c) 2020.
+ * Dimitrios Papazisis
+ * This Software is to be used for educational purposes only.
+ * All rights Reserved.
+ */
+
 package com.dpapazisis.librarian.model.readable;
 
 import com.dpapazisis.librarian.categories.Subject;
 
 import java.time.Year;
+import java.util.List;
+//TODO:Documentation
 
 public abstract class ReadableBuilder {
     protected final String title;
@@ -18,4 +27,6 @@ public abstract class ReadableBuilder {
     }
 
     public abstract Readable build();
+
+    public abstract List<Readable> build(int copies);
 }
