@@ -6,10 +6,27 @@
  */
 
 package com.dpapazisis.librarian.model.readable;
-//TODO:Documentation
 
+/**
+ * The types of Thesis that can be declared
+ */
 public enum ThesisType {
-    GRADUATE,
-    POST_GRADUATE,
-    DOCTORAL
+    GRADUATE {
+        @Override
+        public String toString() {
+            return "Graduate";
+        }
+    },
+    POST_GRADUATE {
+        @Override
+        public String toString() {
+            return "Post-Graduate";
+        }
+    },
+    DOCTORAL {
+        @Override
+        public String toString() {
+            return "Doctoral";
+        }
+    }
 }

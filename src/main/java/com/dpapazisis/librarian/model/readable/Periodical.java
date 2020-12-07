@@ -17,14 +17,32 @@ import java.util.List;
 import java.util.Objects;
 
 import static com.dpapazisis.librarian.model.readable.PublisherProtected.validateISBN;
-//TODO:Documentation
 
+/**
+ * Periodical type that extends {@link Readable} and implements {@link PublisherProtected} interface
+ * the data for a Periodical object
+ * Use of Periodical constructor is restricted please utilize the inner {@link Periodical.Builder} class.
+ * <p>
+ * Usage example:<br>
+ * <pre>
+ * <code>new Periodical.Builder(title,year,pages,subject).build();</code>
+ * </pre>
+ * </p>
+ */
 public final class Periodical extends Readable implements PublisherProtected {
     private String isbn;
     private Publisher publisher;
     private int volume;
     private int issue;
 
+    /**
+     * Usage of the Constructor is restricted, please use the inner {@link Periodical.Builder} class
+     *
+     * @param builder {@link Periodical.Builder}
+     *                <p>Usage example:<br>
+     *                <pre><code>new Periodical.Builder(title,year,pages,subject).build();</code></pre>
+     *                </p>
+     */
     private Periodical(Builder builder) {
         super(builder.title, builder.year, builder.pages, builder.subject);
         this.isbn = builder.isbn;
@@ -54,18 +72,38 @@ public final class Periodical extends Readable implements PublisherProtected {
         this.publisher = publisher;
     }
 
+    /**
+     * Returns the volume number of the Periodical
+     *
+     * @return <tt>int</tt> the volume number
+     */
     public int getVolume() {
         return volume;
     }
 
+    /**
+     * Sets the volume number of the Periodical
+     *
+     * @param volume <tt>int</tt> the volume number
+     */
     public void setVolume(int volume) {
         this.volume = volume;
     }
 
+    /**
+     * Returns the issue number of the Periodical
+     *
+     * @return <tt>int</tt> the issue number
+     */
     public int getIssue() {
         return issue;
     }
 
+    /**
+     * Sets the issue number of the Periodical
+     *
+     * @param issue <tt>int</tt> the issue number
+     */
     public void setIssue(int issue) {
         this.issue = issue;
     }
@@ -98,31 +136,70 @@ public final class Periodical extends Readable implements PublisherProtected {
                 ", issue=" + issue;
     }
 
+    /**
+     * Inner Builder class that extends {@link ReadableBuilder}
+     * that builds {@link Periodical} objects
+     */
     public static class Builder extends ReadableBuilder {
         private String isbn;
         private Publisher publisher;
         private int volume;
         private int issue;
 
+        /**
+         * Constructor of the Builder that requires the minimum data
+         * for creating a {@link Periodical} object
+         *
+         * @param title   {@link String} the title of the Book
+         * @param year    {@link Year} the year of the Book
+         * @param pages   <tt>int</tt> the number of pages
+         * @param subject {@link Subject} the subject of the Book
+         */
         public Builder(String title, Year year, int pages, Subject subject) {
             super(title, year, pages, subject);
         }
 
+        /**
+         * Sets the ISBN code for the current {@link Periodical} to be created
+         *
+         * @param isbn {@link String} the ISBN code
+         * @return {@link Periodical.Builder}
+         * @throws IllegalArgumentException if the code does not comply with
+         *                                  the formats of 10Digit ISBN and 13Digit ISBN
+         */
         public Builder withISBN(String isbn) {
             this.isbn = validateISBN(isbn);
             return this;
         }
 
+        /**
+         * Adds the {@link Publisher} object that is the Publisher of the {@link Periodical}
+         *
+         * @param publisher {@link Publisher} the publisher of the Book
+         * @return {@link Periodical.Builder}
+         */
         public Builder andPublisher(Publisher publisher) {
             this.publisher = publisher;
             return this;
         }
 
+        /**
+         * Adds the volume number of the {@link Periodical} object to be created
+         *
+         * @param volume <tt>int</tt> the volume number
+         * @return {@link Periodical.Builder}
+         */
         public Builder isVolume(int volume) {
             this.volume = volume;
             return this;
         }
 
+        /**
+         * Adds the issue number of the {@link Periodical} object to be created
+         *
+         * @param issue <tt>int</tt> the issue number
+         * @return {@link Periodical.Builder}
+         */
         public Builder isIssue(int issue) {
             this.issue = issue;
             return this;
