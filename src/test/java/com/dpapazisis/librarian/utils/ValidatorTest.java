@@ -6,6 +6,7 @@ import static com.dpapazisis.librarian.utils.Validator.email;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
+@SuppressWarnings("SpellCheckingInspection")
 public class ValidatorTest {
     @Test
     public void validEmail_OnGivenValidFormat_ReturnsTheSameString() {

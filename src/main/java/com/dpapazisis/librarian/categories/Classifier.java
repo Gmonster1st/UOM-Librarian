@@ -11,13 +11,23 @@ import com.dpapazisis.librarian.model.readable.Book;
 import com.dpapazisis.librarian.model.readable.Periodical;
 import com.dpapazisis.librarian.model.readable.Readable;
 import com.dpapazisis.librarian.model.readable.Thesis;
-//TODO:Documentation
 
+/**
+ * Classifier is a static utility class that is used to auto generate Dewey reference codes for the Documents
+ * in this application
+ */
 public class Classifier {
     private static final String BOOK = "Book";
     private static final String PERIODICAL = "Periodical";
     private static final String THESIS = "Thesis";
 
+    /**
+     * Generates a Dewey Code from a {@link Readable} object
+     * implemented by me <tt>for Demonstrating purposes only</tt>
+     *
+     * @param readable {@link Readable} any readable and subclasses
+     * @return {@link String} a dewey code for the Readable object
+     */
     public static DeweyCode generateDeweyCode(Readable readable) {
         switch (readable.getClass().getSimpleName()) {
             case BOOK:
@@ -35,6 +45,13 @@ public class Classifier {
         }
     }
 
+    /**
+     * Code Builder overload that works for {@link Book} objects
+     *
+     * @param book       {@link Book} object passed
+     * @param maxAuthors <tt>int</tt> the number of Authors the book has assigned to it
+     * @return {@link String} a generated code for the Book passed in the method
+     */
     private static String codeBuilder(Book book, int maxAuthors) {
         StringBuilder codeBuilder = new StringBuilder();
         codeBuilder.append(book.getSubject().getCode()).append(".").append(book.getCopyId()).append(" ");
@@ -48,6 +65,12 @@ public class Classifier {
         return codeBuilder.toString();
     }
 
+    /**
+     * Code Builder overload that works for {@link Thesis} objects
+     *
+     * @param thesis {@link Thesis} object passed
+     * @return {@link String} a generated code for the Thesis passed in the method
+     */
     private static String codeBuilder(Thesis thesis) {
         StringBuilder codeBuilder = new StringBuilder();
         codeBuilder.append(thesis.getSubject().getCode()).append(".").append(thesis.getCopyId()).append(" ");
@@ -57,6 +80,12 @@ public class Classifier {
         return codeBuilder.toString();
     }
 
+    /**
+     * Code Builder overload that works for {@link Periodical} objects
+     *
+     * @param periodical {@link Periodical} object passed
+     * @return {@link String} a generated code for the Periodical passed in the method
+     */
     private static String codeBuilder(Periodical periodical) {
         StringBuilder codeBuilder = new StringBuilder();
         codeBuilder.append(periodical.getSubject().getCode()).append(".").append(periodical.getCopyId()).append(" ");

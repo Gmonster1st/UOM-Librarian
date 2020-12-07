@@ -8,12 +8,22 @@
 package com.dpapazisis.librarian.utils;
 
 import java.util.regex.Pattern;
-//TODO:Documentation
 
+/**
+ * Validator class is a static utility class that is used for validation purposes
+ */
 public final class Validator {
     private Validator() {
     }
 
+    /**
+     * Email format validator
+     *
+     * @param email {@link String} the email address for validation
+     * @return {@link String} the email as is
+     * @throws IllegalArgumentException if the does not address of an emails address
+     *                                  <p>Example: <pre>email@host.com</pre></p>
+     */
     public static String email(String email) {
         String emailPattern = "^(.+)@(.+)\\.(.+)$";
         if (Pattern.matches(emailPattern, email)) {

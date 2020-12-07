@@ -114,7 +114,7 @@ setPublisher(Publisher publisher): void
 # copies : int
 # reference : DeweyCode
 --
-# ReadableBulder(String title, Year year, int pages, int copies, DeweyCode reference) : ctor
+# ReadableBuilder(String title, Year year, int pages, int copies, DeweyCode reference) : ctor
 
 + public abstract Readable build(): 
 style=wordwrap</panel_attributes>
@@ -292,7 +292,7 @@ Builder
 + supervisor(Professor professor): Builder
 + type(ThesisTypeEnum type): Builder
 + department(String department): Builder
-+ university(String univerisity): Builder
++ university(String university): Builder
 
 + build(): Thesis &lt;override&gt;&gt;
 style=wordwrap</panel_attributes>
@@ -379,7 +379,7 @@ style=wordwrap</panel_attributes>
     </coordinates>
     <panel_attributes>Because the classes end up 
 with too many constructor
-parameters I desided to use the
+parameters I decided to use the
 builder pattern</panel_attributes>
     <additional_attributes/>
   </element>
