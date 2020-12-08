@@ -78,10 +78,12 @@ public class ClassifierTest {
                 .andPublisher(publisher)
                 .build(3);
 
-        for (int i = 0; i < 3; i++) {
-            var magazine = magazines.get(i);
+        var magazinesIterator = magazines.stream().iterator();
+        int i = 0;
+        while (magazinesIterator.hasNext()) {
+            var magazine = magazinesIterator.next();
             System.out.println(magazine.getReferenceCode().toString());
-            assertThat(magazine.getReferenceCode().getReferenceCode(), is(equalTo("100.0" + i + " TEE")));
+            assertThat(magazine.getReferenceCode().getReferenceCode(), is(equalTo("100.0" + i++ + " TEE")));
         }
     }
 }

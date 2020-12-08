@@ -12,9 +12,9 @@ import com.dpapazisis.librarian.categories.Subject;
 import com.dpapazisis.librarian.model.publisher.Publisher;
 
 import java.time.Year;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.LinkedHashSet;
 import java.util.Objects;
+import java.util.Set;
 
 import static com.dpapazisis.librarian.model.readable.PublisherProtected.validateISBN;
 
@@ -130,7 +130,7 @@ public final class Periodical extends Readable implements PublisherProtected {
     @Override
     public String toString() {
         return super.toString() +
-                "isbn='" + isbn + '\'' +
+                ", isbn='" + isbn + '\'' +
                 ", publisher=" + publisher +
                 ", volume=" + volume +
                 ", issue=" + issue;
@@ -211,8 +211,8 @@ public final class Periodical extends Readable implements PublisherProtected {
         }
 
         @Override
-        public List<Readable> build(int copies) {
-            List<Readable> multipleCopies = new LinkedList<>();
+        public Set<Readable> build(int copies) {
+            Set<Readable> multipleCopies = new LinkedHashSet<>();
             for (int i = 0; i < copies; i++) {
                 var periodical = new Periodical(this);
                 periodical.setCopyId((i < 10) ? "0" + i : String.valueOf(i));

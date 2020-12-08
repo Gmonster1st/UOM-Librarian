@@ -99,8 +99,8 @@ public class Publisher {
 
     @Override
     public String toString() {
-        return "name='" + name + '\'' +
-                ", website=" + website +
-                ", email='" + email + '\'';
+        return "{" + "name: '" + name + '\'' +
+                ", website: " + website +
+                ", email: '" + email + '\'' + "}";
     }
 }

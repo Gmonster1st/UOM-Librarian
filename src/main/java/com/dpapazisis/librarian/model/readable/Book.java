@@ -13,10 +13,7 @@ import com.dpapazisis.librarian.model.person.Author;
 import com.dpapazisis.librarian.model.publisher.Publisher;
 
 import java.time.Year;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 import static com.dpapazisis.librarian.model.readable.PublisherProtected.validateISBN;
 
@@ -150,7 +147,7 @@ public final class Book extends Readable implements PublisherProtected {
     @Override
     public String toString() {
         return super.toString() +
-                "isbn='" + isbn + '\'' +
+                ", isbn='" + isbn + '\'' +
                 ", publisher=" + publisher +
                 ", authors=" + authors;
     }
@@ -238,8 +235,8 @@ public final class Book extends Readable implements PublisherProtected {
         }
 
         @Override
-        public List<Readable> build(int copies) {
-            List<Readable> multipleCopies = new LinkedList<>();
+        public Set<Readable> build(int copies) {
+            Set<Readable> multipleCopies = new LinkedHashSet<>();
             for (int i = 0; i < copies; i++) {
                 var book = new Book(this);
                 book.setCopyId((i < 10) ? "0" + i : String.valueOf(i));

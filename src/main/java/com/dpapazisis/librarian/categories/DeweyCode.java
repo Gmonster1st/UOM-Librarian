@@ -70,7 +70,7 @@ public class DeweyCode {
 
     @Override
     public String toString() {
-        return "category='" + category + '\'' +
-                ", referenceCode='" + referenceCode + '\'';
+        return "{" + "category: '" + category + '\'' +
+                ", referenceCode: '" + referenceCode + '\'' + "}";
     }
 }

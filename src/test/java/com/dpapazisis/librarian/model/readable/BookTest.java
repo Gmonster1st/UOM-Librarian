@@ -14,6 +14,7 @@ import java.time.LocalDate;
 import java.time.Year;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
@@ -107,10 +108,29 @@ public class BookTest {
                 .andPublisher(new Publisher("Editions", url, "edit@myeditions.com"))
                 .build(3);
 
-        for (int i = 0; i < 3; i++) {
-            var book = books.get(i);
-            assertThat(book.getCopyId(), is(equalTo("0" + i)));
-            System.out.println(book.getTitle() + " - "+ book.getCopyId());
+        var booksIterator = books.stream().iterator();
+        int i = 0;
+        while (booksIterator.hasNext()) {
+            var book = booksIterator.next();
+            assertThat(book.getCopyId(), is(equalTo("0" + i++)));
+            System.out.println(book.getTitle() + " - " + book.getCopyId());
         }
+    }
+
+    @Test
+    public void build_GivenMultipleCopies_TheyAreAcceptedByAHashSet() {
+        var books = new Book.Builder(TITLE, YEAR, PAGES, subject)
+                .withAuthor(new Author("TestName1", "Surname1", LocalDate.parse("1982-12-29")))
+                .andPublisher(new Publisher("Editions", url, "edit@myeditions.com"))
+                .build(3);
+
+        HashSet<Readable> bookHashSet = new HashSet<>(books);
+
+        for (Readable book : bookHashSet) {
+            System.out.println(book);
+            System.out.println(book.hashCode());
+        }
+
+        assertThat(bookHashSet.size(), is(equalTo(books.size())));
     }
 }

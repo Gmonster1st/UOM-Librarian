@@ -11,6 +11,7 @@ import com.dpapazisis.librarian.categories.Subject;
 
 import java.time.Year;
 import java.util.List;
+import java.util.Set;
 
 /**
  * ReadableBuilder abstract class that is the prototype for the inner builder classes
@@ -53,5 +54,5 @@ public abstract class ReadableBuilder {
      * @param copies <tt>int</tt> the number of copies to create
      * @return {@link List<Readable>} objects created by the subclass
      */
-    public abstract List<Readable> build(int copies);
+    public abstract Set<Readable> build(int copies);
 }

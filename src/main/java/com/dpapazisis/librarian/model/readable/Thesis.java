@@ -13,10 +13,10 @@ import com.dpapazisis.librarian.model.person.Author;
 import com.dpapazisis.librarian.model.person.Professor;
 
 import java.time.Year;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.LinkedHashSet;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * Thesis type that extends {@link Readable} and hold the data for a Thesis object
@@ -165,7 +165,7 @@ public final class Thesis extends Readable {
     @Override
     public String toString() {
         return super.toString() +
-                "author=" + author +
+                ", author=" + author +
                 ", supervisor=" + supervisor +
                 ", type=" + type.name().toLowerCase(Locale.ROOT) +
                 ", department='" + department + '\'' +
@@ -259,8 +259,8 @@ public final class Thesis extends Readable {
         }
 
         @Override
-        public List<Readable> build(int copies) {
-            List<Readable> multipleCopies = new LinkedList<>();
+        public Set<Readable> build(int copies) {
+            Set<Readable> multipleCopies = new LinkedHashSet<>();
             for (int i = 0; i < copies; i++) {
                 var thesis = new Thesis(this);
                 thesis.setCopyId((i < 10) ? "0" + i : String.valueOf(i));
