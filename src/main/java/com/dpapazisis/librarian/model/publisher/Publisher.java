@@ -9,13 +9,14 @@ package com.dpapazisis.librarian.model.publisher;
 
 import com.dpapazisis.librarian.utils.Validator;
 
+import java.io.Serializable;
 import java.net.URL;
 import java.util.Objects;
 
 /**
  * Publisher class that correspond to a publisher of any type of Readable object
  */
-public class Publisher {
+public class Publisher implements Serializable {
     private final String name;
     private URL website;
     private String email;

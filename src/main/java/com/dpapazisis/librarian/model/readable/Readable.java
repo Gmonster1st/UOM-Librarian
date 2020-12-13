@@ -10,6 +10,7 @@ package com.dpapazisis.librarian.model.readable;
 import com.dpapazisis.librarian.categories.DeweyCode;
 import com.dpapazisis.librarian.categories.Subject;
 
+import java.io.Serializable;
 import java.time.Year;
 import java.util.Objects;
 
@@ -17,7 +18,7 @@ import java.util.Objects;
  * Readable abstract class that holds the general type of objects
  * to use in a Library application. Use one of its subclasses
  */
-public abstract class Readable {
+public abstract class Readable implements Serializable {
     private String title;
     private Year year;
     private int pages;

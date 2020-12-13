@@ -7,13 +7,14 @@
 
 package com.dpapazisis.librarian.categories;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
  * Subject class defines an object that hold information for the Subject that a document involves.
  * It hold the name of the subject and the category code that corresponds to the Dewey Decimal system
  */
-public class Subject {
+public class Subject implements Serializable {
     private final String name;
     private final String code;
 

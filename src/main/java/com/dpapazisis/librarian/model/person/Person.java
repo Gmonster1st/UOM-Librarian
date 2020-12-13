@@ -9,6 +9,7 @@ package com.dpapazisis.librarian.model.person;
 
 import com.dpapazisis.librarian.utils.Validator;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -16,7 +17,7 @@ import java.util.Objects;
  * Person is an abstract class that defines a person object. It is meant to be used as
  * a prototype for the subclasses that fit the Person profile
  */
-public abstract class Person {
+public abstract class Person implements Serializable {
     private final String name;
     private final String surname;
     private final LocalDate birthDate;
@@ -113,7 +114,7 @@ public abstract class Person {
 
     @Override
     public String toString() {
-        return "{"+"name: '" + name + '\'' +
+        return "{" + "name: '" + name + '\'' +
                 ", surname: '" + surname + '\'' +
                 ", birthDate: " + birthDate +
                 ", shortBio: '" + shortBio + '\'' +

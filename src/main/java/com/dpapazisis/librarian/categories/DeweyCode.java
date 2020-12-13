@@ -7,6 +7,7 @@
 
 package com.dpapazisis.librarian.categories;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
@@ -21,7 +22,7 @@ import java.util.Objects;
  *
  * @author Dimitrios Papazisis
  */
-public class DeweyCode {
+public class DeweyCode implements Serializable {
     private final String category;
     private final String referenceCode;
 
