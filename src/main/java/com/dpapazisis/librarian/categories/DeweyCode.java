@@ -52,7 +52,7 @@ public class DeweyCode implements Serializable {
      *
      * @return {@link String} the reference code
      */
-    public String getReferenceCode() {
+    public String getCode() {
         return referenceCode;
     }
 
@@ -61,12 +61,12 @@ public class DeweyCode implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         DeweyCode deweyCode = (DeweyCode) o;
-        return getCategory().equals(deweyCode.getCategory()) && getReferenceCode().equals(deweyCode.getReferenceCode());
+        return getCategory().equals(deweyCode.getCategory()) && getCode().equals(deweyCode.getCode());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getCategory(), getReferenceCode());
+        return Objects.hash(getCategory(), getCode());
     }
 
     @Override

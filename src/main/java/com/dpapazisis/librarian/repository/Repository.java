@@ -49,7 +49,7 @@ public class Repository implements Serializable {
             library = libraryState.getLibrary();
         }
 
-    }
+    } // This method should be private
 
     public void saveLibrary() {
         FileHelper.saveToDisk(new LibraryState(library, authors, publishers));

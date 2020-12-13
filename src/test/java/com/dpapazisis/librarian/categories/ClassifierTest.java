@@ -83,7 +83,7 @@ public class ClassifierTest {
         while (magazinesIterator.hasNext()) {
             var magazine = magazinesIterator.next();
             System.out.println(magazine.getReferenceCode().toString());
-            assertThat(magazine.getReferenceCode().getReferenceCode(), is(equalTo("100.0" + i++ + " TEE")));
+            assertThat(magazine.getReferenceCode().getCode(), is(equalTo("100.0" + i++ + " TEE")));
         }
     }
 }
