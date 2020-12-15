@@ -109,5 +109,9 @@ public class ReadableTableModel extends AbstractTableModel {
             fireTableDataChanged();
         }
     }
+
+    public long getCopiesCount(int row) {
+        return (long) getValueAt(row, 6);
+    }
 }
 

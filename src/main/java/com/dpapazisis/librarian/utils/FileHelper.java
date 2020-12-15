@@ -12,8 +12,8 @@ import com.dpapazisis.librarian.repository.LibraryState;
 import org.apache.commons.lang3.SerializationUtils;
 
 import javax.swing.filechooser.FileSystemView;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -36,19 +36,20 @@ public class FileHelper {
     }
 
     public static Set<Subject> loadCsv(String uri) throws FileNotFoundException {
-        Path path = Paths.get(uri);
-        if (Files.exists(path)) {
-            try {
-                return Files.readAllLines(path)
-                        .stream()
-                        .map(line -> {
-                            String[] strings = line.split(",");
-                            return new Subject(strings[1], strings[0]);
-                        })
-                        .collect(Collectors.toSet());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        try (
+                InputStream stream = FileHelper.class.getResourceAsStream(uri);
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(stream, StandardCharsets.UTF_8))
+        ) {
+            return bufferedReader.lines()
+                    .collect(Collectors.toList())
+                    .stream()
+                    .map(line -> {
+                        String[] strings = line.split(",");
+                        return new Subject(strings[1], strings[0]);
+                    })
+                    .collect(Collectors.toSet());
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         throw new FileNotFoundException();
     }

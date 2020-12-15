@@ -94,7 +94,7 @@ public class Repository implements Serializable {
         return library.remove(object);
     }
 
-    private Properties loadProperties() {
+    private void loadProperties() {
         properties = new Properties();
         try {
             properties.load(getClass()
@@ -103,7 +103,6 @@ public class Repository implements Serializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return properties;
     }
 
     private void loadSubjects() {

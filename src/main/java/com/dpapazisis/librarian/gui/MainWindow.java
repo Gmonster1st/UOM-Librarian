@@ -74,9 +74,13 @@ public class MainWindow extends JFrame {
                 int row = table.getSelectedRow();
                 if (e.getClickCount() == 2 && row >= 0) {
                     Readable readable = data.getReadableAt(row);
-                    JDialog details = new DetailsWindow(MainWindow.this, "Readable Details", readable);
+                    DetailsWindow details = new DetailsWindow(
+                            MainWindow.this,
+                            "Readable Details",
+                            readable,
+                            data.getCopiesCount(row)
+                    );
                     details.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-                    details.setSize(500, 500);
                     details.setResizable(false);
                     details.pack();
                     details.setLocationRelativeTo(MainWindow.this);
