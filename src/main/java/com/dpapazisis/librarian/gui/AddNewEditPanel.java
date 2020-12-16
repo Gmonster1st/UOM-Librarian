@@ -18,15 +18,20 @@ import java.awt.*;
 import java.util.Vector;
 import java.util.stream.Collectors;
 
-public class DetailsPanel extends JPanel {
+public class AddNewEditPanel extends JPanel {
     private Readable readable;
     private final boolean back;
     private GridBagConstraints constraints;
 
     private boolean edit = false;
 
+    public AddNewEditPanel() {
+        super();
+        back = false;
+        setMainPanel(); //TODO: add parameter to use as indicator for add or edit
+    }
 
-    public DetailsPanel(Readable readable, boolean back) {
+    public AddNewEditPanel(Readable readable, boolean back) {
         super();
         this.readable = readable;
         this.back = back;
@@ -42,7 +47,7 @@ public class DetailsPanel extends JPanel {
         constraints = new GridBagConstraints();
         constraints.anchor = GridBagConstraints.PAGE_START;
 
-        Dimension minWindowSize = new Dimension(800, 300);
+        Dimension minWindowSize = new Dimension(800, 600);
         this.setLayout(layout);
         this.setMinimumSize(minWindowSize);
         this.setPreferredSize(minWindowSize);
@@ -86,32 +91,68 @@ public class DetailsPanel extends JPanel {
 
         //region Create and add Title text field and label (editable)
         constraints.weightx = 1.0;
-        JTextField title = getjTextField(GRIDX_START, "Title:", readable.getTitle(), edit, 1, 2);
+        JLabel titleLabel = new JLabel("Title:");
+        JTextField title = new JTextField(readable.getTitle());
+        title.setEditable(edit);
+        constraints.gridx = GRIDX_START;
+        constraints.gridy = 1;
+        add(titleLabel, constraints);
+        constraints.gridy = 2;
         add(title, constraints);
         //endregion
 
         //region Create and add Year text field and label (editable)
-        JTextField year = getjTextField(GRIDX_MIDDLE, "Year:", readable.getYear().toString(), edit, 1, 2);
+        JLabel yearLabel = new JLabel("Year:");
+        JTextField year = new JTextField(readable.getYear().toString());
+        year.setEditable(edit);
+        constraints.gridx = GRIDX_MIDDLE;
+        constraints.gridy = 1;
+        add(yearLabel, constraints);
+        constraints.gridy = 2;
         add(year, constraints);
         //endregion
 
         //region Create and add Reference Code text field and label
-        JTextField reference = getjTextField(GRIDX_END, "Reference Code:", readable.getReferenceCode().getCode(), false, 1, 2);
+        JLabel referenceLabel = new JLabel("Reference Code:");
+        JTextField reference = new JTextField(readable.getReferenceCode().getCode());
+        reference.setEditable(false);
+        constraints.gridx = GRIDX_END;
+        constraints.gridy = 1;
+        add(referenceLabel, constraints);
+        constraints.gridy = 2;
         add(reference, constraints);
         //endregion
 
         //region Create and add Subject text field and label
-        JTextField subject = getjTextField(GRIDX_START, "Subject:", readable.getSubject().getName(), false, 3, 4);
+        JLabel subjectLabel = new JLabel("Subject:");
+        JTextField subject = new JTextField(readable.getSubject().getName());
+        subject.setEditable(false);
+        constraints.gridx = GRIDX_START;
+        constraints.gridy = 3;
+        add(subjectLabel, constraints);
+        constraints.gridy = 4;
         add(subject, constraints);
         //endregion
 
         //region Create and add Pages text field and label (editable)
-        JTextField pages = getjTextField(GRIDX_MIDDLE, "Pages:", String.valueOf(readable.getPages()), edit, 3, 4);
+        JLabel pagesLabel = new JLabel("Pages:");
+        JTextField pages = new JTextField(String.valueOf(readable.getPages()));
+        pages.setEditable(edit);
+        constraints.gridx = GRIDX_MIDDLE;
+        constraints.gridy = 3;
+        add(pagesLabel, constraints);
+        constraints.gridy = 4;
         add(pages, constraints);
         //endregion
 
         //region Create and add Lend status text field and label
-        JTextField lend = getjTextField(GRIDX_END, "Lend:", String.valueOf(readable.isLend()), false, 3, 4);
+        JLabel lendLabel = new JLabel("Lend:");
+        JTextField lend = new JTextField(String.valueOf(readable.isLend()));
+        lend.setEditable(false);
+        constraints.gridx = GRIDX_END;
+        constraints.gridy = 3;
+        add(lendLabel, constraints);
+        constraints.gridy = 4;
         add(lend, constraints);
         //endregion
 
@@ -119,12 +160,24 @@ public class DetailsPanel extends JPanel {
             var book = (Book) readable;
 
             //region Create and add ISBN text field and label
-            JTextField isbn = getjTextField(GRIDX_START, "ISBN:", book.getISBN(), false, 5, 6);
+            JLabel isbnLabel = new JLabel("ISBN:");
+            JTextField isbn = new JTextField(book.getISBN());
+            isbn.setEditable(false);
+            constraints.gridx = GRIDX_START;
+            constraints.gridy = 5;
+            add(isbnLabel, constraints);
+            constraints.gridy = 6;
             add(isbn, constraints);
             //endregion
 
             //region Create and add Publisher text field and label
-            JTextField publisher = getjTextField(GRIDX_MIDDLE, "Publisher:", book.getPublisher().getName(), false, 5, 6);
+            JLabel publisherLabel = new JLabel("Publisher:");
+            JTextField publisher = new JTextField(book.getPublisher().getName());
+            publisher.setEditable(false);
+            constraints.gridx = GRIDX_MIDDLE;
+            constraints.gridy = 5;
+            add(publisherLabel, constraints);
+            constraints.gridy = 6;
             add(publisher, constraints);
             //endregion
 
@@ -157,18 +210,35 @@ public class DetailsPanel extends JPanel {
             var periodical = (Periodical) readable;
 
             //region Create and add ISBN text field and label
-            JTextField isbn = getjTextField(GRIDX_START, "ISBN:", periodical.getISBN(), false, 5, 6);
+            JLabel isbnLabel = new JLabel("ISBN:");
+            JTextField isbn = new JTextField(periodical.getISBN());
+            isbn.setEditable(false);
+            constraints.gridx = GRIDX_START;
+            constraints.gridy = 5;
+            add(isbnLabel, constraints);
+            constraints.gridy = 6;
             add(isbn, constraints);
             //endregion
 
             //region Create and add Publisher text field and label
-            JTextField publisher = getjTextField(GRIDX_MIDDLE, "Publisher:", periodical.getPublisher().getName(), false, 5, 6);
+            JLabel publisherLabel = new JLabel("Publisher:");
+            JTextField publisher = new JTextField(periodical.getPublisher().getName());
+            publisher.setEditable(false);
+            constraints.gridx = GRIDX_MIDDLE;
+            constraints.gridy = 5;
+            add(publisherLabel, constraints);
+            constraints.gridy = 6;
             add(publisher, constraints);
             //endregion
 
             //region Create and add Volume and Issue text field and label
-            String volIssueValue = "Volume: " + periodical.getVolume() + " Issue: " + periodical.getIssue();
-            JTextField volIssue = getjTextField(GRIDX_END, "Volume and Issue:", volIssueValue, false, 5, 6);
+            JLabel volIssueLabel = new JLabel("Volume and Issue:");
+            JTextField volIssue = new JTextField("Volume: " + periodical.getVolume() + " Issue: " + periodical.getIssue());
+            volIssue.setEditable(false);
+            constraints.gridx = GRIDX_END;
+            constraints.gridy = 5;
+            add(volIssueLabel, constraints);
+            constraints.gridy = 6;
             add(volIssue, constraints);
             //endregion
         }
@@ -177,45 +247,64 @@ public class DetailsPanel extends JPanel {
             var thesis = (Thesis) readable;
 
             //region Create and add Thesis type text field and label
-            JTextField type = getjTextField(GRIDX_START, "Type:", thesis.getType().toString(), false, 5, 6);
+            JLabel typeLabel = new JLabel("Type:");
+            JTextField type = new JTextField(thesis.getType().toString());
+            type.setEditable(false);
+            constraints.gridx = GRIDX_START;
+            constraints.gridy = 5;
+            add(typeLabel, constraints);
+            constraints.gridy = 6;
             add(type, constraints);
             //endregion
 
             //region Create and add Author text field and label
-            String authorValue = thesis.getAuthor().getName() + " " + thesis.getAuthor().getSurname();
-            JTextField author = getjTextField(GRIDX_MIDDLE, "Author:", authorValue, false, 5, 6);
+            JLabel authorLabel = new JLabel("Author:");
+            JTextField author = new JTextField(thesis.getAuthor().getName() + " " + thesis.getAuthor().getSurname());
+            author.setEditable(false);
+            constraints.gridx = GRIDX_MIDDLE;
+            constraints.gridy = 5;
+            add(authorLabel, constraints);
+            constraints.gridy = 6;
             add(author, constraints);
             //endregion
 
             //region Create and add Professor text field and label
-            String professorValue = thesis.getSupervisor().getName() + " " + thesis.getSupervisor().getSurname();
-            JTextField professor = getjTextField(GRIDX_END, "Professor:", professorValue, false, 5, 6);
+            JLabel professorLabel = new JLabel("Professor:");
+            JTextField professor = new JTextField(thesis.getSupervisor().getName() + " " + thesis.getSupervisor().getSurname());
+            professor.setEditable(false);
+            constraints.gridx = GRIDX_END;
+            constraints.gridy = 5;
+            add(professorLabel, constraints);
+            constraints.gridy = 6;
             add(professor, constraints);
             //endregion
 
             //region Create and add University text field and label (editable)
-            JTextField university = getjTextField(GRIDX_MIDDLE, "University:", thesis.getUniversity(), edit, 7, 8);
+            JLabel universityLabel = new JLabel("University:");
+            JTextField university = new JTextField(thesis.getUniversity());
+            university.setEditable(edit);
+            constraints.gridx = GRIDX_MIDDLE;
+            constraints.gridy = 7;
+            add(universityLabel, constraints);
+            constraints.gridy = 8;
             add(university, constraints);
             //endregion (Editab
 
             //region Create and add Department text field and label (editable)
-            JTextField department = getjTextField(GRIDX_END, "Department:", thesis.getDepartment(), edit, 7, 8);
+            JLabel departmentLabel = new JLabel("Department:");
+            JTextField department = new JTextField(thesis.getDepartment());
+            department.setEditable(edit);
+            constraints.gridx = GRIDX_END;
+            constraints.gridy = 7;
+            add(departmentLabel, constraints);
+            constraints.gridy = 8;
             add(department, constraints);
             //endregion
         }
 
         //region Footer
-        JPanel footerPanel = new JPanel(new GridBagLayout());
-        var footerConstrains = new GridBagConstraints();
-        footerConstrains.gridx = 1;
-        footerConstrains.gridy = 1;
-        footerConstrains.fill = GridBagConstraints.RELATIVE;
-        footerConstrains.gridheight = 1;
-        footerConstrains.insets = new Insets(10, 50, 10, 50);
-        footerConstrains.weighty = 1.0;
-        footerConstrains.anchor = GridBagConstraints.CENTER;
-
-        footerPanel.setBorder(BorderFactory.createEtchedBorder());
+        JPanel footerPanel = new JPanel();
+        footerPanel.setBorder(BorderFactory.createLineBorder(new Color(0, 0, 0), 2));
 
         JButton deleteButton = new JButton("Delete");
         deleteButton.setBounds(65, 60, 120, 30);
@@ -228,41 +317,15 @@ public class DetailsPanel extends JPanel {
             }
         });
 
-        footerPanel.add(deleteButton, footerConstrains);
-
-        JButton editButton = new JButton("Edit");
-        editButton.setBounds(65, 60, 120, 30);
-        editButton.addActionListener(e -> {
-            if (!back) {
-                AddNewEditWindow editWindow = new AddNewEditWindow(Frame.getFrames()[0], "Edit readable");
-                editWindow.setContentPane(new AddNewEditPanel(readable, false));
-                editWindow.setVisible(true);
-                dispose();
-            }
-        });
-
-        footerConstrains.gridx = 4;
-        footerConstrains.gridy = 1;
-        footerPanel.add(editButton, footerConstrains);
+        footerPanel.add(deleteButton);
 
         constraints.gridx = 0;
-        constraints.gridy = 9;
-        constraints.weighty = 0.5;
+        constraints.gridy = 10;
+        constraints.weighty = 1.0;
         constraints.gridwidth = GridBagConstraints.REMAINDER;
         constraints.fill = GridBagConstraints.BOTH;
         add(footerPanel, constraints);
         //endregion
-    }
-
-    private JTextField getjTextField(int guixSpot, String label, String value, boolean edit, int labelRow, int textFieldRow) {
-        JLabel titleLabel = new JLabel(label);
-        JTextField title = new JTextField(value);
-        title.setEditable(edit);
-        constraints.gridx = guixSpot;
-        constraints.gridy = labelRow;
-        add(titleLabel, constraints);
-        constraints.gridy = textFieldRow;
-        return title;
     }
 
     private void dispose() {
@@ -271,7 +334,7 @@ public class DetailsPanel extends JPanel {
     }
 
     private void goBack() {
-        JPanel root = (JPanel) DetailsPanel.this.getParent();
+        JPanel root = (JPanel) AddNewEditPanel.this.getParent();
         CardLayout cardLayout = (CardLayout) root.getLayout();
         cardLayout.show(root, "CopiesTable");
     }

@@ -5,25 +5,32 @@
  * All rights Reserved.
  */
 
-package com.dpapazisis.librarian.gui.tablemodels;
+package com.dpapazisis.librarian.gui.componentmodels;
 
 import com.dpapazisis.librarian.model.readable.Readable;
-import com.dpapazisis.librarian.repository.Repository;
+import com.dpapazisis.librarian.services.LibraryAction;
+import com.dpapazisis.librarian.services.LibraryObserver;
+import com.dpapazisis.librarian.services.LibraryService;
 
 import javax.swing.table.AbstractTableModel;
 import java.util.List;
 
 import static java.util.stream.Collectors.groupingBy;
 
-public class CopiesTableModel extends AbstractTableModel {
-    private final Repository repository = Repository.getInstance();
+public class CopiesTableModel extends AbstractTableModel implements LibraryObserver {
+    private final LibraryService libraryService = LibraryService.getInstance();
     private final Readable readable;
-    private final List<Readable> copies;
+    private List<Readable> copies;
 
     public CopiesTableModel(Readable readable) {
         super();
+        libraryService.addObserver(this);
         this.readable = readable;
-        copies = repository.getLibrary()
+        getCopies();
+    }
+
+    private void getCopies() {
+        copies = libraryService.getLibrary()
                 .stream()
                 .collect(groupingBy(Readable::getTitle))
                 .get(readable.getTitle());
@@ -87,5 +94,11 @@ public class CopiesTableModel extends AbstractTableModel {
 
     public Readable getReadableAt(int row) {
         return copies.get(row);
+    }
+
+    @Override
+    public void update(LibraryAction action) {
+        getCopies();
+        fireTableDataChanged();
     }
 }

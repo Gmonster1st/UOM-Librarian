@@ -5,7 +5,7 @@
  * All rights Reserved.
  */
 
-package com.dpapazisis.librarian.repository;
+package com.dpapazisis.librarian.services;
 
 import com.dpapazisis.librarian.model.person.Author;
 import com.dpapazisis.librarian.model.publisher.Publisher;
@@ -16,9 +16,9 @@ import java.util.Set;
 
 //TODO: Documentation
 public class LibraryState implements Serializable {
-    private Set<Readable> library;
-    private Set<Author> authors;
-    private Set<Publisher> publishers;
+    private final Set<Readable> library;
+    private final Set<Author> authors;
+    private final Set<Publisher> publishers;
 
     public LibraryState(Set<Readable> library, Set<Author> authors, Set<Publisher> publishers) {
         this.library = library;

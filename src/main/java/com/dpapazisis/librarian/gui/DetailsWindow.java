@@ -15,15 +15,14 @@ import java.awt.*;
 public class DetailsWindow extends JDialog {
     private final Readable readable;
     private final JPanel mainPanel;
-    private long copiesCount;
+    private final long copiesCount;
 
     public DetailsWindow(Frame owner, String title, Readable readable, long copiesCount) {
         super(owner, title);
         this.readable = readable;
         this.copiesCount = copiesCount;
         this.mainPanel = new JPanel(new CardLayout(5, 5));
-        Dimension minSize = new Dimension(700, 550);
-//        mainPanel.setLayout(null);
+        Dimension minSize = new Dimension(700, 350);
         mainPanel.setMinimumSize(minSize);
         mainPanel.setPreferredSize(minSize);
         setPreferredSize(minSize);
@@ -43,6 +42,4 @@ public class DetailsWindow extends JDialog {
             cardLayout.show(mainPanel, "Details");
         }
     }
-
-
 }

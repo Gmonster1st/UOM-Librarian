@@ -8,7 +8,7 @@
 package com.dpapazisis.librarian.utils;
 
 import com.dpapazisis.librarian.categories.Subject;
-import com.dpapazisis.librarian.repository.LibraryState;
+import com.dpapazisis.librarian.services.LibraryState;
 import org.apache.commons.lang3.SerializationUtils;
 
 import javax.swing.filechooser.FileSystemView;

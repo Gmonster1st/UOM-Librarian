@@ -5,7 +5,7 @@
  * All rights Reserved.
  */
 
-package com.dpapazisis.librarian.repository;
+package com.dpapazisis.librarian.services;
 
 import com.dpapazisis.librarian.categories.Subject;
 import com.dpapazisis.librarian.model.person.Author;
@@ -19,15 +19,14 @@ import java.io.Serializable;
 import java.util.Properties;
 import java.util.Set;
 
-public class Repository implements Serializable {
-    private static Repository instance = null;
+class Repository implements Serializable {
     private Properties properties;
     private Set<Subject> subjects;
     private Set<Readable> library;
     private Set<Author> authors;
     private Set<Publisher> publishers;
 
-    private Repository() {
+    protected Repository() {
         loadProperties();
         loadSubjects();
         loadLibrary();
@@ -35,7 +34,7 @@ public class Repository implements Serializable {
 
 //TODO: Implement this and check what else need to ne done by this class
 
-    public void loadLibrary() {
+    private void loadLibrary() {
         LibraryState libraryState = null;
         try {
             libraryState = FileHelper.loadFromDisk();
@@ -51,47 +50,40 @@ public class Repository implements Serializable {
 
     } // This method should be private
 
-    public void saveLibrary() {
+    protected void saveLibrary() {
         FileHelper.saveToDisk(new LibraryState(library, authors, publishers));
     }
 
-    public static Repository getInstance() {
-        if (instance == null) {
-            instance = new Repository();
-        }
-        return instance;
-    }
-
-    public Set<Subject> getSubjects() {
+    protected Set<Subject> getSubjects() {
         return subjects;
     }
 
-    public Set<Readable> getLibrary() {
+    protected Set<Readable> getLibrary() {
         return library;
     }
 
-    public Set<Author> getAuthors() {
+    protected Set<Author> getAuthors() {
         return authors;
     }
 
-    public Set<Publisher> getPublishers() {
+    protected Set<Publisher> getPublishers() {
         return publishers;
     }
 
-    public boolean addReadable(Readable readable) {
+    protected boolean addReadable(Readable readable) {
         return library.add(readable);
     }
 
-    public boolean addAuthor(Author author) {
+    protected boolean addAuthor(Author author) {
         return authors.add(author);
     }
 
-    public boolean addPublisher(Publisher publisher) {
+    protected boolean addPublisher(Publisher publisher) {
         return publishers.add(publisher);
     }
 
-    public boolean removeReadable(Readable object) {
-        return library.remove(object);
+    protected boolean removeReadable(Readable readable) {
+        return library.remove(readable);
     }
 
     private void loadProperties() {

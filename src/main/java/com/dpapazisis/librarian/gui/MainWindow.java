@@ -7,7 +7,7 @@
 
 package com.dpapazisis.librarian.gui;
 
-import com.dpapazisis.librarian.gui.tablemodels.ReadableTableModel;
+import com.dpapazisis.librarian.gui.componentmodels.ReadableTableModel;
 import com.dpapazisis.librarian.model.readable.Readable;
 
 import javax.swing.*;
@@ -62,7 +62,6 @@ public class MainWindow extends JFrame {
 
     private void setMainTable() {
         data = new ReadableTableModel();
-        data.addTableModelListener(e -> myTable.repaint());
         myTable = new JTable(data);
         myTable.setAutoCreateRowSorter(true);
         myTable.setPreferredScrollableViewportSize(new Dimension(800, 600));
@@ -125,7 +124,7 @@ public class MainWindow extends JFrame {
     }
 
     private void newRecordDialog() {
-        JDialog dialog = new AddNewWindow(MainWindow.this, "Add New Record");
+        JDialog dialog = new AddNewEditWindow(MainWindow.this, "Add New Record");
         dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         dialog.setSize(250, 250);
         dialog.setResizable(false);
@@ -145,6 +144,10 @@ public class MainWindow extends JFrame {
         constraints.weighty = 1.0;
         constraints.anchor = GridBagConstraints.PAGE_END;
         mainPanel.add(button, constraints);
+    }
+
+    public ReadableTableModel getTableModel() {
+        return data;
     }
 
     public Dimension getMainPanelSize() {

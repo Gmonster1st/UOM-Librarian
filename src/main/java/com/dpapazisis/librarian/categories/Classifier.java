@@ -21,6 +21,9 @@ public class Classifier {
     private static final String PERIODICAL = "Periodical";
     private static final String THESIS = "Thesis";
 
+    private Classifier() {
+    }
+
     /**
      * Generates a Dewey Code from a {@link Readable} object
      * implemented by me <tt>for Demonstrating purposes only</tt>

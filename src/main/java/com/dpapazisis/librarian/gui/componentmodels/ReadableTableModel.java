@@ -5,10 +5,12 @@
  * All rights Reserved.
  */
 
-package com.dpapazisis.librarian.gui.tablemodels;
+package com.dpapazisis.librarian.gui.componentmodels;
 
 import com.dpapazisis.librarian.model.readable.Readable;
-import com.dpapazisis.librarian.repository.Repository;
+import com.dpapazisis.librarian.services.LibraryAction;
+import com.dpapazisis.librarian.services.LibraryObserver;
+import com.dpapazisis.librarian.services.LibraryService;
 
 import javax.swing.table.AbstractTableModel;
 import java.util.List;
@@ -18,21 +20,14 @@ import java.util.stream.Collectors;
 import static java.util.stream.Collectors.counting;
 import static java.util.stream.Collectors.groupingBy;
 
-//TODO: Probably needs to be more generic so it can be used to display all sets of Readable objects
-public class ReadableTableModel extends AbstractTableModel {
-    private final Repository repository = Repository.getInstance();
+public class ReadableTableModel extends AbstractTableModel implements LibraryObserver {
+    private final LibraryService libraryService = LibraryService.getInstance();
     private Set<Readable> library;
     private List<Readable> libraryView;
 
     public ReadableTableModel() {
-        this.library = repository.getLibrary();
-        this.libraryView = library
-                .stream()
-                .collect(groupingBy(Readable::getTitle))
-                .values()
-                .stream()
-                .map(l -> l.get(0))
-                .collect(Collectors.toList());
+        libraryService.addObserver(this);
+        getData();
     }
 
     @Override
@@ -98,20 +93,25 @@ public class ReadableTableModel extends AbstractTableModel {
         return libraryView.get(row);
     }
 
-    public void addReadable(Readable readable) {
-        if (repository.addReadable(readable)) {
-            fireTableDataChanged();
-        }
-    }
-
-    public void removeReadable(Readable readable) {
-        if (repository.removeReadable(readable)) {
-            fireTableDataChanged();
-        }
-    }
-
     public long getCopiesCount(int row) {
         return (long) getValueAt(row, 6);
+    }
+
+    private void getData() {
+        this.library = libraryService.getLibrary();
+        this.libraryView = libraryService.getLibrary()
+                .stream()
+                .collect(groupingBy(Readable::getTitle))
+                .values()
+                .stream()
+                .map(l -> l.get(0))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public void update(LibraryAction action) {
+        getData();
+        fireTableDataChanged();
     }
 }
 

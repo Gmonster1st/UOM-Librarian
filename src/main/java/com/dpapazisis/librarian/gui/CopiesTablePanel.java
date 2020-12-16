@@ -7,9 +7,8 @@
 
 package com.dpapazisis.librarian.gui;
 
-import com.dpapazisis.librarian.gui.tablemodels.CopiesTableModel;
+import com.dpapazisis.librarian.gui.componentmodels.CopiesTableModel;
 import com.dpapazisis.librarian.model.readable.Readable;
-import com.dpapazisis.librarian.repository.Repository;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,8 +16,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class CopiesTablePanel extends JPanel {
-    private final Repository repository = Repository.getInstance();
-
     private final Readable readable;
     private JTable myTable;
     private GridBagConstraints constraints;
