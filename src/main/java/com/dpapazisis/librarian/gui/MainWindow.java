@@ -27,7 +27,6 @@ public class MainWindow extends JFrame {
     private final JPanel mainPanel;
     private final JButton button;
     private JMenuBar jMenuBar;
-    private JTable myTable;
     private GridBagConstraints constraints;
     private ReadableTableModel data;
 
@@ -62,7 +61,7 @@ public class MainWindow extends JFrame {
 
     private void setMainTable() {
         data = new ReadableTableModel();
-        myTable = new JTable(data);
+        JTable myTable = new JTable(data);
         myTable.setAutoCreateRowSorter(true);
         myTable.setPreferredScrollableViewportSize(new Dimension(800, 600));
         myTable.setFillsViewportHeight(true);

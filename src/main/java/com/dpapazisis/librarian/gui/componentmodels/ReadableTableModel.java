@@ -21,7 +21,7 @@ import static java.util.stream.Collectors.counting;
 import static java.util.stream.Collectors.groupingBy;
 
 public class ReadableTableModel extends AbstractTableModel implements LibraryObserver {
-    private final LibraryService libraryService = LibraryService.getInstance();
+    private final transient LibraryService libraryService = LibraryService.getInstance();
     private Set<Readable> library;
     private List<Readable> libraryView;
 

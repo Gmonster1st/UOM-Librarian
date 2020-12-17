@@ -36,6 +36,11 @@
             <version>3.3.0</version>
             <type>maven-plugin</type>
         </dependency>
+        <dependency>
+            <groupId>org.jfree</groupId>
+            <artifactId>jfreechart</artifactId>
+            <version>1.5.1</version>
+        </dependency>
     </dependencies>
 
     <build>

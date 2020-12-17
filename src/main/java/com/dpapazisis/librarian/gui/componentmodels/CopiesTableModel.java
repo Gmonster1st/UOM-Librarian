@@ -18,7 +18,7 @@ import java.util.List;
 import static java.util.stream.Collectors.groupingBy;
 
 public class CopiesTableModel extends AbstractTableModel implements LibraryObserver {
-    private final LibraryService libraryService = LibraryService.getInstance();
+    private final transient LibraryService libraryService = LibraryService.getInstance();
     private final Readable readable;
     private List<Readable> copies;
 

@@ -22,14 +22,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class FileHelper {
-    // In case that FileSystemView doesn't work on Linux
-    //    private static final Path homePath = Paths.get(System.getProperty("user.home"));
-    private static final Path homePath = Paths.get(
-            FileSystemView
-                    .getFileSystemView()
-                    .getDefaultDirectory()
-                    .getPath()
-    );
+    private static final Path homePath = getPath();
+
+    private static Path getPath() {
+        return Paths.get(
+                FileSystemView
+                        .getFileSystemView()
+                        .getDefaultDirectory()
+                        .getPath()
+        );
+    }
+
     private static final Path libraryFilePath = resolveLibraryFilePath();
 
     private FileHelper() {
