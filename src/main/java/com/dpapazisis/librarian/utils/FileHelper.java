@@ -57,10 +57,8 @@ public class FileHelper {
         throw new FileNotFoundException();
     }
 
-//    TODO: Add all file operations
-
     public static LibraryState loadFromDisk() throws FileNotFoundException {
-        LibraryState library = new LibraryState(new HashSet<>(), new HashSet<>(), new HashSet<>());
+        LibraryState library = new LibraryState(new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>());
 
         if (libraryFilePath != null) {
             if (Files.exists(libraryFilePath)) {

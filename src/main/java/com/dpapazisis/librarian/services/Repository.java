@@ -9,6 +9,7 @@ package com.dpapazisis.librarian.services;
 
 import com.dpapazisis.librarian.categories.Subject;
 import com.dpapazisis.librarian.model.person.Author;
+import com.dpapazisis.librarian.model.person.Professor;
 import com.dpapazisis.librarian.model.publisher.Publisher;
 import com.dpapazisis.librarian.model.readable.Readable;
 import com.dpapazisis.librarian.utils.FileHelper;
@@ -25,14 +26,13 @@ class Repository implements Serializable {
     private Set<Readable> library;
     private Set<Author> authors;
     private Set<Publisher> publishers;
+    private Set<Professor> professors;
 
     protected Repository() {
         loadProperties();
         loadSubjects();
         loadLibrary();
     }
-
-//TODO: Implement this and check what else need to ne done by this class
 
     private void loadLibrary() {
         LibraryState libraryState = null;
@@ -46,12 +46,13 @@ class Repository implements Serializable {
             publishers = libraryState.getPublishers();
             authors = libraryState.getAuthors();
             library = libraryState.getLibrary();
+            professors = libraryState.getProfessors();
         }
 
-    } // This method should be private
+    }
 
     protected void saveLibrary() {
-        FileHelper.saveToDisk(new LibraryState(library, authors, publishers));
+        FileHelper.saveToDisk(new LibraryState(library, authors, publishers, professors));
     }
 
     protected Set<Subject> getSubjects() {
@@ -70,6 +71,10 @@ class Repository implements Serializable {
         return publishers;
     }
 
+    protected Set<Professor> getProfessors() {
+        return professors;
+    }
+
     protected boolean addReadable(Readable readable) {
         return library.add(readable);
     }
@@ -80,6 +85,10 @@ class Repository implements Serializable {
 
     protected boolean addPublisher(Publisher publisher) {
         return publishers.add(publisher);
+    }
+
+    protected boolean addProfessor(Professor professor) {
+        return professors.add(professor);
     }
 
     protected boolean removeReadable(Readable readable) {
@@ -103,8 +112,7 @@ class Repository implements Serializable {
             try {
                 subjects = FileHelper.loadCsv(path);
             } catch (FileNotFoundException e) {
-                e.printStackTrace(); //For now
-                //            TODO: Load message window
+                e.printStackTrace();
             }
         }
     }

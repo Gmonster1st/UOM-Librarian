@@ -151,11 +151,4 @@ public final class Author extends Person {
     public int hashCode() {
         return Objects.hash(super.hashCode(), getNumberOfBooks(), getPublishers());
     }
-
-    @Override
-    public String toString() {
-        return super.toString() +
-                ", numberOfBooks: " + numberOfBooks +
-                ", publishers: " + publishers + "}";
-    }
 }

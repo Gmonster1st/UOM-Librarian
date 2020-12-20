@@ -9,6 +9,7 @@ package com.dpapazisis.librarian.services;
 
 import com.dpapazisis.librarian.categories.Subject;
 import com.dpapazisis.librarian.model.person.Author;
+import com.dpapazisis.librarian.model.person.Professor;
 import com.dpapazisis.librarian.model.publisher.Publisher;
 import com.dpapazisis.librarian.model.readable.Readable;
 
@@ -16,7 +17,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-//TODO: Implement this class
 public class LibraryService {
     private static final LibraryService INSTANCE = new LibraryService();
 
@@ -43,7 +43,6 @@ public class LibraryService {
 
     public boolean addNewReadable(Readable readable) {
         if (repository.addReadable(readable)) {
-            repository.saveLibrary();
             notifyObservers(LibraryAction.ADD_NEW);
             return true;
         }
@@ -66,9 +65,12 @@ public class LibraryService {
         return repository.getPublishers();
     }
 
+    public Set<Professor> getProfessors() {
+        return repository.getProfessors();
+    }
+
     public boolean addAuthor(Author author) {
         if (repository.addAuthor(author)) {
-            repository.saveLibrary();
             notifyObservers(LibraryAction.ADD_NEW);
             return true;
         }
@@ -77,7 +79,14 @@ public class LibraryService {
 
     public boolean addPublisher(Publisher publisher) {
         if (repository.addPublisher(publisher)) {
-            repository.saveLibrary();
+            notifyObservers(LibraryAction.ADD_NEW);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean addProfessor(Professor professor) {
+        if (repository.addProfessor(professor)) {
             notifyObservers(LibraryAction.ADD_NEW);
             return true;
         }
@@ -86,16 +95,16 @@ public class LibraryService {
 
     public boolean removeReadable(Readable readable) {
         if (repository.removeReadable(readable)) {
-            repository.saveLibrary();
             notifyObservers(LibraryAction.DELETE);
             return true;
         }
         return false;
     }
 
-    private void notifyObservers(LibraryAction action) {
+    public void notifyObservers(LibraryAction action) {
         for (var observer : observers) {
             observer.update(action);
         }
+        repository.saveLibrary();
     }
 }

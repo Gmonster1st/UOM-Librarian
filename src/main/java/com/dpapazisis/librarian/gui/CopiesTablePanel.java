@@ -38,7 +38,8 @@ public class CopiesTablePanel extends JPanel {
     }
 
     private void setMainTable() {
-        data = new CopiesTableModel(readable);
+        CopiesTableModel copiesTableModel = new CopiesTableModel(readable);
+        data = copiesTableModel;
         data.addTableModelListener(e -> myTable.repaint());
         myTable = new JTable(data);
         myTable.setAutoCreateRowSorter(true);
@@ -72,4 +73,5 @@ public class CopiesTablePanel extends JPanel {
         scrollPane.setBorder(BorderFactory.createEtchedBorder());
         this.add(scrollPane, constraints);
     }
+    //TODO: Adjust the edit function for multiple copies to be available in the CopiesTablePanel
 }

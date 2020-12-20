@@ -114,10 +114,7 @@ public abstract class Person implements Serializable {
 
     @Override
     public String toString() {
-        return "{" + "name: '" + name + '\'' +
-                ", surname: '" + surname + '\'' +
-                ", birthDate: " + birthDate +
-                ", shortBio: '" + shortBio + '\'' +
-                ", email: '" + email + '\'';
+        return name + " " + surname;
+
     }
 }

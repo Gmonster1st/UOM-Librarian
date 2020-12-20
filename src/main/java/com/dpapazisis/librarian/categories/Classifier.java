@@ -17,9 +17,9 @@ import com.dpapazisis.librarian.model.readable.Thesis;
  * in this application
  */
 public class Classifier {
-    private static final String BOOK = "Book";
-    private static final String PERIODICAL = "Periodical";
-    private static final String THESIS = "Thesis";
+    public static final String BOOK = "Book";
+    public static final String PERIODICAL = "Periodical";
+    public static final String THESIS = "Thesis";
 
     private Classifier() {
     }

@@ -22,7 +22,7 @@ public abstract class Readable implements Serializable {
     private String title;
     private Year year;
     private int pages;
-    protected final Subject subject;
+    protected Subject subject;
     protected DeweyCode referenceCode;
     private boolean lendStatus;
     private String copyId = "00";
@@ -138,6 +138,15 @@ public abstract class Readable implements Serializable {
      */
     public Subject getSubject() {
         return subject;
+    }
+
+    /**
+     * Sets the subject of the readable object and generates new reference code
+     *
+     * @param subject the subject
+     */
+    public void setSubject(Subject subject) {
+        this.subject = subject;
     }
 
     /**

@@ -11,6 +11,7 @@ import com.dpapazisis.librarian.model.readable.Book;
 import com.dpapazisis.librarian.model.readable.Periodical;
 import com.dpapazisis.librarian.model.readable.Readable;
 import com.dpapazisis.librarian.model.readable.Thesis;
+import com.dpapazisis.librarian.services.LibraryAction;
 import com.dpapazisis.librarian.services.LibraryService;
 
 import javax.swing.*;
@@ -61,6 +62,7 @@ public class DetailsPanel extends JPanel {
         JButton backButton = new JButton("Back");
         backButton.addActionListener(e -> goBack());
         JLabel copyIdLabel = new JLabel("copy: " + readable.getCopyId());
+        JLabel singleCopy = new JLabel("Single Copy");
         //endregion
 
         //region Create header panel, add back button , copyId label and add the header to the GridBagLayout
@@ -70,12 +72,14 @@ public class DetailsPanel extends JPanel {
         headerPanel.setMinimumSize(headerDimension);
         headerPanel.setBorder(BorderFactory.createEtchedBorder());
         headerPanel.add(backButton, BorderLayout.LINE_START);
+        headerPanel.add(singleCopy, BorderLayout.CENTER);
         headerPanel.add(copyIdLabel, BorderLayout.LINE_END);
         constraints.gridwidth = GridBagConstraints.REMAINDER;
         constraints.gridx = 0;
         constraints.gridy = 0;
         add(headerPanel, constraints);
         backButton.setVisible(back);
+        singleCopy.setVisible(!back);
         copyIdLabel.setVisible(back);
         //endregion
 
@@ -108,7 +112,14 @@ public class DetailsPanel extends JPanel {
         //endregion
 
         //region Create and add Lend status text field and label
-        JTextField lend = getTextField(GRIDX_END, "Lend:", String.valueOf(readable.isLend()), 3, 4);
+        JCheckBox lend = new JCheckBox("Is Lend");
+        lend.setSelected(readable.isLend());
+        lend.addActionListener(e -> {
+            readable.setLendStatus(lend.isSelected());
+            LibraryService.getInstance().notifyObservers(LibraryAction.EDIT);
+        });
+        constraints.gridx = GRIDX_END;
+        constraints.gridy = 4;
         add(lend, constraints);
         //endregion
 
@@ -227,7 +238,6 @@ public class DetailsPanel extends JPanel {
 
         footerPanel.add(deleteButton, footerConstrains);
 
-//        TODO: Adjust the edit function for multiple copies to be available in the CopiesTablePanel
         JButton editButton = new JButton("Edit");
         editButton.setBounds(65, 60, 120, 30);
         if (back) {
@@ -235,8 +245,11 @@ public class DetailsPanel extends JPanel {
         }
         editButton.addActionListener(e -> {
             if (!back) {
-                AddNewEditWindow editWindow = new AddNewEditWindow(Frame.getFrames()[0], "Edit readable");
+                MainWindow mainWindow = (MainWindow) Frame.getFrames()[0];
+                AddNewEditWindow editWindow = new AddNewEditWindow(mainWindow, "Edit readable");
                 editWindow.setContentPane(new AddNewEditPanel(readable, false));
+                editWindow.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+                editWindow.setLocationRelativeTo(mainWindow);
                 editWindow.setVisible(true);
                 dispose();
             }
@@ -268,6 +281,7 @@ public class DetailsPanel extends JPanel {
 
     private void dispose() {
         var parentWindow = (DetailsWindow) getRootPane().getParent();
+
         parentWindow.dispose();
     }
 

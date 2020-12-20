@@ -100,8 +100,6 @@ public class Publisher implements Serializable {
 
     @Override
     public String toString() {
-        return "{" + "name: '" + name + '\'' +
-                ", website: " + website +
-                ", email: '" + email + '\'' + "}";
+        return name;
     }
 }

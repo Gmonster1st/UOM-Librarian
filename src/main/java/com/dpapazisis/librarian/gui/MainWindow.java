@@ -7,6 +7,7 @@
 
 package com.dpapazisis.librarian.gui;
 
+import com.dpapazisis.librarian.categories.Classifier;
 import com.dpapazisis.librarian.gui.componentmodels.ReadableTableModel;
 import com.dpapazisis.librarian.model.readable.Readable;
 
@@ -24,6 +25,7 @@ import java.awt.event.MouseEvent;
  */
 public class MainWindow extends JFrame {
     public static final String FILE = "File";
+
     private final JPanel mainPanel;
     private final JButton button;
     private JMenuBar jMenuBar;
@@ -103,7 +105,11 @@ public class MainWindow extends JFrame {
     private void setMenuBar() {
         jMenuBar = new JMenuBar();
         JMenu fileMenu = createMenu(FILE, "File Operations", KeyEvent.VK_F);
-        fileMenu.add(createMenuItem("AddNew", "AddNew Record", e -> newRecordDialog()));
+        JMenu addSubMenu = createMenu("AddNew", "AddNewRecord", KeyEvent.VK_N);
+        addSubMenu.add(createMenuItem("New Book", "New Book Record", e -> newRecordDialog(Classifier.BOOK)));
+        addSubMenu.add(createMenuItem("New Periodical", "New Periodical Record", e -> newRecordDialog(Classifier.PERIODICAL)));
+        addSubMenu.add(createMenuItem("New Thesis", "New Thesis Record", e -> newRecordDialog(Classifier.THESIS)));
+        fileMenu.add(addSubMenu);
         jMenuBar.add(fileMenu);
         setJMenuBar(jMenuBar);
     }
@@ -122,8 +128,9 @@ public class MainWindow extends JFrame {
         return menuItem;
     }
 
-    private void newRecordDialog() {
+    private void newRecordDialog(String type) {
         JDialog dialog = new AddNewEditWindow(MainWindow.this, "Add New Record");
+        dialog.setContentPane(new AddNewEditPanel(type));
         dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         dialog.setSize(250, 250);
         dialog.setResizable(false);

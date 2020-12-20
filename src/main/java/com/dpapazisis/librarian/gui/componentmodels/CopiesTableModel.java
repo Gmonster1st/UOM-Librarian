@@ -24,7 +24,7 @@ public class CopiesTableModel extends AbstractTableModel implements LibraryObser
 
     public CopiesTableModel(Readable readable) {
         super();
-        libraryService.addObserver(this);
+        libraryService.addObserver(this); //TODO:There is a memory leak issue here to be addressed
         this.readable = readable;
         getCopies();
     }
