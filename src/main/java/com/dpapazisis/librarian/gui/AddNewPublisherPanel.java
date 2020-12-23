@@ -25,7 +25,7 @@ public class AddNewPublisherPanel extends JPanel {
     private final JTextField email;
 
     public AddNewPublisherPanel() {
-        Dimension size = new Dimension(300, 250);
+        Dimension size = new Dimension(300, 150);
         setMinimumSize(size);
         setPreferredSize(size);
         setLayout(new GridBagLayout());
@@ -34,6 +34,7 @@ public class AddNewPublisherPanel extends JPanel {
 
         JLabel nameLabel = new JLabel("Name: ");
         name = new JTextField();
+        name.setColumns(20);
 
         constraints.gridy = 0;
         constraints.gridx = GRIDX_LEFT;
@@ -41,14 +42,14 @@ public class AddNewPublisherPanel extends JPanel {
         constraints.gridx = GRIDX_RIGHT;
         add(name, constraints);
 
-        JLabel surnameLabel = new JLabel("Surname: ");
+        JLabel websiteLabel = new JLabel("Website: ");
         website = new JTextField();
         constraints.gridy = 1;
         constraints.gridx = GRIDX_LEFT;
-        add(surnameLabel, constraints);
+        add(websiteLabel, constraints);
         constraints.gridx = GRIDX_RIGHT;
-
         add(website, constraints);
+
         JLabel emailLabel = new JLabel("Email: ");
         email = new JTextField();
         constraints.gridy = 2;
@@ -81,7 +82,7 @@ public class AddNewPublisherPanel extends JPanel {
         });
         add(new JLabel());
         constraints.fill = GridBagConstraints.NONE;
-        constraints.gridy = 7;
+        constraints.gridy = 3;
         add(addButton, constraints);
     }
 }

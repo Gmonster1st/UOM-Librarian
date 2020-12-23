@@ -20,14 +20,13 @@ import java.util.stream.Collectors;
 import static java.util.stream.Collectors.counting;
 import static java.util.stream.Collectors.groupingBy;
 
-public class ReadableTableModel extends AbstractTableModel implements LibraryObserver {
+public class SearchTableModel extends AbstractTableModel implements LibraryObserver {
     private final transient LibraryService libraryService = LibraryService.getInstance();
-    private Set<Readable> library;
     private List<Readable> libraryView;
+    private Set<Readable> library;
 
-    public ReadableTableModel() {
-        libraryService.addObserver(this);
-        getData();
+    public SearchTableModel() {
+        resetTable();
     }
 
     @Override
@@ -97,7 +96,43 @@ public class ReadableTableModel extends AbstractTableModel implements LibraryObs
         return (long) getValueAt(row, 6);
     }
 
-    private void getData() {
+    public void searchTableByTitle(String title) {
+        this.library = libraryService.getSearchByTitle(title);
+        this.libraryView = libraryService.getSearchByTitle(title)
+                .stream()
+                .collect(groupingBy(Readable::getTitle))
+                .values()
+                .stream()
+                .map(l -> l.get(0))
+                .collect(Collectors.toList());
+        fireTableDataChanged();
+    }
+
+    public void searchTableByAuthor(String author) {
+        this.library = libraryService.getSearchByAuthor(author);
+        this.libraryView = libraryService.getSearchByAuthor(author)
+                .stream()
+                .collect(groupingBy(Readable::getTitle))
+                .values()
+                .stream()
+                .map(l -> l.get(0))
+                .collect(Collectors.toList());
+        fireTableDataChanged();
+    }
+
+    public void searchTableByKeyWord(String keyWord) {
+        this.library = libraryService.getSearchByKeyWord(keyWord);
+        this.libraryView = libraryService.getSearchByKeyWord(keyWord)
+                .stream()
+                .collect(groupingBy(Readable::getTitle))
+                .values()
+                .stream()
+                .map(l -> l.get(0))
+                .collect(Collectors.toList());
+        fireTableDataChanged();
+    }
+
+    public void resetTable() {
         this.library = libraryService.getLibrary();
         this.libraryView = libraryService.getLibrary()
                 .stream()
@@ -106,12 +141,11 @@ public class ReadableTableModel extends AbstractTableModel implements LibraryObs
                 .stream()
                 .map(l -> l.get(0))
                 .collect(Collectors.toList());
+        fireTableDataChanged();
     }
 
     @Override
     public void update(LibraryAction action) {
-        getData();
         fireTableDataChanged();
     }
 }
-

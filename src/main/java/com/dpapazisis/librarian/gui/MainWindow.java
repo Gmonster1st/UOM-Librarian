@@ -25,6 +25,7 @@ import java.awt.event.MouseEvent;
  */
 public class MainWindow extends JFrame {
     public static final String FILE = "File";
+    private static final String VIEW = "View";
 
     private final JPanel mainPanel;
     private final JButton button;
@@ -36,7 +37,7 @@ public class MainWindow extends JFrame {
     public MainWindow(String title) {
         super(title);
         this.mainPanel = new JPanel();
-        this.button = new JButton("ClickMe!");
+        this.button = new JButton("Statistics");
         jMenuBar = new JMenuBar();
         setMainPanel();
         setContentPane(mainPanel);
@@ -71,7 +72,8 @@ public class MainWindow extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 JTable table = (JTable) e.getSource();
-                int row = table.getSelectedRow();
+                int viewRow = table.getSelectedRow();
+                int row = table.convertRowIndexToModel(viewRow);
                 if (e.getClickCount() == 2 && row >= 0) {
                     Readable readable = data.getReadableAt(row);
                     DetailsWindow details = new DetailsWindow(
@@ -111,6 +113,16 @@ public class MainWindow extends JFrame {
         addSubMenu.add(createMenuItem("New Thesis", "New Thesis Record", e -> newRecordDialog(Classifier.THESIS)));
         fileMenu.add(addSubMenu);
         jMenuBar.add(fileMenu);
+
+        JMenu view = createMenu(VIEW, "View Operations", KeyEvent.VK_V);
+        view.add(createMenuItem("Find", "Find a Readable", e -> {
+            var dialog = new JDialog(MainWindow.this, "Find");
+            dialog.setContentPane(new FindPanel());
+            dialog.pack();
+            dialog.setLocationRelativeTo(null);
+            dialog.setVisible(true);
+        }));
+        jMenuBar.add(view);
         setJMenuBar(jMenuBar);
     }
 
@@ -139,9 +151,13 @@ public class MainWindow extends JFrame {
         dialog.setVisible(true);
     }
 
-    //    TODO:Remove or find a purpose for this button
     private void setButton() {
-        button.addActionListener(e -> JOptionPane.showMessageDialog(mainPanel, "This is my Message"));
+        button.addActionListener(e -> {
+            var statistics = new StatisticsWindow(MainWindow.this, "Statistics");
+            statistics.pack();
+            statistics.setLocationRelativeTo(null);
+            statistics.setVisible(true);
+        });
         constraints.gridx = 1;
         constraints.gridy = 1;
         constraints.fill = GridBagConstraints.RELATIVE;
@@ -150,10 +166,6 @@ public class MainWindow extends JFrame {
         constraints.weighty = 1.0;
         constraints.anchor = GridBagConstraints.PAGE_END;
         mainPanel.add(button, constraints);
-    }
-
-    public ReadableTableModel getTableModel() {
-        return data;
     }
 
     public Dimension getMainPanelSize() {

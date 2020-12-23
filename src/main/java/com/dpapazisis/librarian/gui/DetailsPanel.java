@@ -7,6 +7,8 @@
 
 package com.dpapazisis.librarian.gui;
 
+import com.dpapazisis.librarian.gui.componentmodels.AuthorListModel;
+import com.dpapazisis.librarian.model.person.Author;
 import com.dpapazisis.librarian.model.readable.Book;
 import com.dpapazisis.librarian.model.readable.Periodical;
 import com.dpapazisis.librarian.model.readable.Readable;
@@ -16,11 +18,10 @@ import com.dpapazisis.librarian.services.LibraryService;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Vector;
-import java.util.stream.Collectors;
 
 public class DetailsPanel extends JPanel {
     private static final boolean NOT_EDITABLE = false;
+    private final transient LibraryService libraryService = LibraryService.getInstance();
 
     private transient Readable readable;
     private final boolean back;
@@ -116,7 +117,7 @@ public class DetailsPanel extends JPanel {
         lend.setSelected(readable.isLend());
         lend.addActionListener(e -> {
             readable.setLendStatus(lend.isSelected());
-            LibraryService.getInstance().notifyObservers(LibraryAction.EDIT);
+            libraryService.notifyObservers(LibraryAction.EDIT);
         });
         constraints.gridx = GRIDX_END;
         constraints.gridy = 4;
@@ -138,15 +139,7 @@ public class DetailsPanel extends JPanel {
 
             //region Create and add Authors list field and label
             JLabel authorsLabel = new JLabel("Authors:");
-            JList<String> authors = new JList<>(
-                    new Vector<>(
-                            (book.getAuthors()
-                                    .stream()
-                                    .map(o -> o.getName() + " " + o.getSurname())
-                                    .collect(Collectors.toList())
-                            )
-                    )
-            );
+            JList<Author> authors = new JList<>(new AuthorListModel(book.getAuthors()));
             authors.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
             JScrollPane authorsScroller = new JScrollPane(authors);
             constraints.gridx = GRIDX_END;
@@ -228,7 +221,7 @@ public class DetailsPanel extends JPanel {
         JButton deleteButton = new JButton("Delete");
         deleteButton.setBounds(65, 60, 120, 30);
         deleteButton.addActionListener(e -> {
-            LibraryService.getInstance().removeReadable(readable);
+            libraryService.removeReadable(readable);
             if (back) {
                 goBack();
             } else {

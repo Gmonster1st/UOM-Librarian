@@ -57,7 +57,7 @@ public class Classifier {
      */
     private static String codeBuilder(Book book, int maxAuthors) {
         StringBuilder codeBuilder = new StringBuilder();
-        codeBuilder.append(book.getSubject().getCode()).append(".").append(book.getCopyId()).append(" ");
+        codeBuilder.append("B-").append(book.getSubject().getCode()).append(".").append(book.getCopyId()).append(" ");
         for (int i = 0; i < maxAuthors; i++) {
             var author = book.getAuthorAt(i);
             if (maxAuthors == 1) {
@@ -76,7 +76,7 @@ public class Classifier {
      */
     private static String codeBuilder(Thesis thesis) {
         StringBuilder codeBuilder = new StringBuilder();
-        codeBuilder.append(thesis.getSubject().getCode()).append(".").append(thesis.getCopyId()).append(" ");
+        codeBuilder.append("T-").append(thesis.getSubject().getCode()).append(".").append(thesis.getCopyId()).append(" ");
         var author = thesis.getAuthor();
         codeBuilder.append(author.getName().toUpperCase().substring(0, 2));
         codeBuilder.append(author.getSurname().toUpperCase().charAt(0));
@@ -91,7 +91,7 @@ public class Classifier {
      */
     private static String codeBuilder(Periodical periodical) {
         StringBuilder codeBuilder = new StringBuilder();
-        codeBuilder.append(periodical.getSubject().getCode()).append(".").append(periodical.getCopyId()).append(" ");
+        codeBuilder.append("P-").append(periodical.getSubject().getCode()).append(".").append(periodical.getCopyId()).append(" ");
         codeBuilder.append(periodical.getTitle().toUpperCase().substring(0, 2));
         codeBuilder.append(periodical.getPublisher().getName().toUpperCase().charAt(0));
         return codeBuilder.toString();

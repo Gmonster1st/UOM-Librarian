@@ -52,6 +52,7 @@ public class AddNewEditPanel extends JPanel {
     private JTextField department;
     private AuthorComboBoxModel authorComboBoxModel;
     private ProfessorComboBoxModel professorComboBoxModel;
+    private AuthorListModel authorListModel;
 
     public AddNewEditPanel(String type) {
         super();
@@ -139,7 +140,7 @@ public class AddNewEditPanel extends JPanel {
         Dimension publisherSize = new Dimension(130, 20);
         Dimension fullNameSize = new Dimension(150, 20);
 
-        setBookFields(isbnSize, publisherSize);
+        setBookFields(isbnSize, publisherSize, fullNameSize);
 
         setPeriodicalFields(isbnSize, publisherSize);
 
@@ -326,7 +327,7 @@ public class AddNewEditPanel extends JPanel {
         }
     }
 
-    private void setBookFields(Dimension isbnSize, Dimension publisherSize) {
+    private void setBookFields(Dimension isbnSize, Dimension publisherSize, Dimension fullNameSize) {
         if (readable instanceof Book || type.equals(Classifier.BOOK)) {
             assert readable instanceof Book;
             var book = (Book) readable;
@@ -345,32 +346,35 @@ public class AddNewEditPanel extends JPanel {
             add(publisherLabel, constraints);
             constraints.gridy = 6;
             add(publisher, constraints);
+            addNewInfoDialog(GRIDX_MIDDLE, "Add Publisher", new AddNewPublisherPanel());
             //endregion
 
             //region Create and add Authors list field and label
 //            TODO:Add edit button for authors and in new dialog add form for new and multi selection list
             JLabel authorsLabel = new JLabel("Authors:");
             bookAuthors = new JList<>();
-            bookAuthors.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+            bookAuthors.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
             JScrollPane authorsScroller = new JScrollPane(bookAuthors);
             constraints.gridx = GRIDX_END;
             constraints.gridy = 5;
             add(authorsLabel, constraints);
             constraints.gridy = 6;
             constraints.gridheight = 2;
-            Dimension scrollerSize = new Dimension(0, 60);
+            Dimension scrollerSize = new Dimension(160, 60);
             authorsScroller.setMinimumSize(scrollerSize);
             authorsScroller.setPreferredSize(scrollerSize);
             add(authorsScroller, constraints);
+            addNewInfoDialog(GRIDX_END, "Add Author", new AddNewAuthorPanel());
             //endregion
 
             //region Set Book Values for edit
             if (readable != null) {
                 isbn.setText(book.getISBN());
                 publisher.setSelectedItem(book.getPublisher());
-                bookAuthors.setModel(new AuthorListModel(book.getAuthors()));
+                bookAuthors.setModel(new AuthorListModel(book.getAuthors())); //TODO:Revisit this implementation to work on selection or the way it is presented
             } else {
-                bookAuthors.setModel(new AuthorListModel());
+                authorListModel = new AuthorListModel();
+                bookAuthors.setModel(authorListModel);
             }
             //endregion
         }
@@ -481,7 +485,7 @@ public class AddNewEditPanel extends JPanel {
         )
                 .withISBN(isbn.getText())
                 .andPublisher((Publisher) publisher.getSelectedItem())
-                .withAuthors(((AuthorListModel) bookAuthors.getModel()).getAuthors())
+                .withAuthors(bookAuthors.getSelectedValuesList())
                 .build();
 
         libraryService.addNewReadable(book);
@@ -506,6 +510,9 @@ public class AddNewEditPanel extends JPanel {
         }
         if (professorComboBoxModel != null) {
             libraryService.removeObserver(professorComboBoxModel);
+        }
+        if (authorListModel != null) {
+            libraryService.removeObserver(authorListModel);
         }
         libraryService.removeObserver(publisherComboBoxModel);
         var parentWindow = (AddNewEditWindow) getRootPane().getParent();
