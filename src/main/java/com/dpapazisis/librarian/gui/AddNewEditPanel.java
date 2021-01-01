@@ -20,9 +20,12 @@ import com.dpapazisis.librarian.services.LibraryService;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.HierarchyEvent;
+import java.util.concurrent.Callable;
 
 import static java.lang.Integer.parseInt;
 import static java.time.Year.parse;
+import static java.util.stream.Collectors.groupingBy;
 
 public class AddNewEditPanel extends JPanel {
     private static final int GRIDX_START = 2;
@@ -53,6 +56,8 @@ public class AddNewEditPanel extends JPanel {
     private AuthorComboBoxModel authorComboBoxModel;
     private ProfessorComboBoxModel professorComboBoxModel;
     private AuthorListModel authorListModel;
+    private boolean multiCopyOperation;
+    private AuthorListModel readableAuthorListModel;
 
     public AddNewEditPanel(String type) {
         super();
@@ -70,6 +75,10 @@ public class AddNewEditPanel extends JPanel {
 
     public void setReadable(Readable readable) {
         this.readable = readable;
+    }
+
+    public void setMultiCopyFunction(boolean state) {
+        multiCopyOperation = state;
     }
 
     private void setMainPanel() {
@@ -140,7 +149,7 @@ public class AddNewEditPanel extends JPanel {
         Dimension publisherSize = new Dimension(130, 20);
         Dimension fullNameSize = new Dimension(150, 20);
 
-        setBookFields(isbnSize, publisherSize, fullNameSize);
+        setBookFields(isbnSize, publisherSize);
 
         setPeriodicalFields(isbnSize, publisherSize);
 
@@ -163,21 +172,24 @@ public class AddNewEditPanel extends JPanel {
 
         footerPanel.setBorder(BorderFactory.createEtchedBorder());
 
+        JSpinner numOfCopies = new JSpinner(new SpinnerNumberModel(1, 1, Integer.MAX_VALUE, 1));
+        numOfCopies.setPreferredSize(new Dimension(60, 20));
+
         JButton saveButton = new JButton("Save");
         saveButton.setBounds(65, 60, 120, 30);
         saveButton.addActionListener(e -> {
             switch (type) {
                 case Classifier.BOOK:
-                    newBook();
+                    newBook((Integer) numOfCopies.getValue());
                     break;
                 case Classifier.PERIODICAL:
-                    newPeriodical();
+                    newPeriodical((Integer) numOfCopies.getValue());
                     break;
                 case Classifier.THESIS:
-                    newThesis();
+                    newThesis((Integer) numOfCopies.getValue());
                     break;
                 default:
-                    saveReadable();
+                    saveToLibrary();
                     return;
             }
             dispose();
@@ -199,7 +211,19 @@ public class AddNewEditPanel extends JPanel {
             footerConstrains.gridx = 4;
             footerConstrains.gridy = 1;
         }
+
         footerPanel.add(saveButton, footerConstrains);
+
+        if (!type.equals("")) {
+            JLabel copiesLabel = new JLabel("Number of Copies: ");
+            footerConstrains.gridx = 5;
+            footerConstrains.insets = new Insets(0, 0, 0, 0);
+            footerConstrains.anchor = GridBagConstraints.LINE_END;
+            footerPanel.add(copiesLabel, footerConstrains);
+            footerConstrains.gridx = 6;
+            footerConstrains.anchor = GridBagConstraints.LINE_START;
+            footerPanel.add(numOfCopies, footerConstrains);
+        }
 
         constraints.gridx = 0;
         constraints.gridy = 9;
@@ -208,6 +232,20 @@ public class AddNewEditPanel extends JPanel {
         constraints.fill = GridBagConstraints.BOTH;
         add(footerPanel, constraints);
         //endregion
+    }
+
+    private void saveToLibrary() {
+        if (multiCopyOperation) {
+            var copies = libraryService.getLibrary()
+                    .stream()
+                    .collect(groupingBy(Readable::isCopy))
+                    .get(readable.isCopy());
+            for (var item : copies) {
+                saveReadable(item);
+            }
+        } else {
+            saveReadable();
+        }
     }
 
     private void setThesisFields(Dimension fullNameSize) {
@@ -239,7 +277,7 @@ public class AddNewEditPanel extends JPanel {
             add(authorLabel, constraints);
             constraints.gridy = 6;
             add(thesisAuthor, constraints);
-            addNewInfoDialog(GRIDX_MIDDLE, "New Author", new AddNewAuthorPanel());
+            addEditInfoDialog(GRIDX_MIDDLE, "New Author", new AddNewAuthorPanel(), "Add", () -> null);
             //endregion
 
             //region Create and add Professor ComboBox and label
@@ -253,7 +291,7 @@ public class AddNewEditPanel extends JPanel {
             add(professorLabel, constraints);
             constraints.gridy = 6;
             add(professor, constraints);
-            addNewInfoDialog(GRIDX_END, "New Professor", new AddNewProfessorPanel());
+            addEditInfoDialog(GRIDX_END, "New Professor", new AddNewProfessorPanel(), "Add", () -> null);
             //endregion
 
             //region Create and add University text field and label
@@ -295,7 +333,7 @@ public class AddNewEditPanel extends JPanel {
             add(publisherLabel, constraints);
             constraints.gridy = 6;
             add(publisher, constraints);
-            addNewInfoDialog(GRIDX_MIDDLE, "New Publisher", new AddNewPublisherPanel());
+            addEditInfoDialog(GRIDX_MIDDLE, "New Publisher", new AddNewPublisherPanel(), "Add", () -> null);
             //endregion
 
             //region Create and add Volume and Issue text field and label
@@ -327,7 +365,7 @@ public class AddNewEditPanel extends JPanel {
         }
     }
 
-    private void setBookFields(Dimension isbnSize, Dimension publisherSize, Dimension fullNameSize) {
+    private void setBookFields(Dimension isbnSize, Dimension publisherSize) {
         if (readable instanceof Book || type.equals(Classifier.BOOK)) {
             assert readable instanceof Book;
             var book = (Book) readable;
@@ -346,11 +384,10 @@ public class AddNewEditPanel extends JPanel {
             add(publisherLabel, constraints);
             constraints.gridy = 6;
             add(publisher, constraints);
-            addNewInfoDialog(GRIDX_MIDDLE, "Add Publisher", new AddNewPublisherPanel());
+            addEditInfoDialog(GRIDX_MIDDLE, "Add Publisher", new AddNewPublisherPanel(), "Add", () -> null);
             //endregion
 
             //region Create and add Authors list field and label
-//            TODO:Add edit button for authors and in new dialog add form for new and multi selection list
             JLabel authorsLabel = new JLabel("Authors:");
             bookAuthors = new JList<>();
             bookAuthors.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
@@ -364,34 +401,52 @@ public class AddNewEditPanel extends JPanel {
             authorsScroller.setMinimumSize(scrollerSize);
             authorsScroller.setPreferredSize(scrollerSize);
             add(authorsScroller, constraints);
-            addNewInfoDialog(GRIDX_END, "Add Author", new AddNewAuthorPanel());
             //endregion
 
             //region Set Book Values for edit
             if (readable != null) {
                 isbn.setText(book.getISBN());
                 publisher.setSelectedItem(book.getPublisher());
-                bookAuthors.setModel(new AuthorListModel(book.getAuthors())); //TODO:Revisit this implementation to work on selection or the way it is presented
+                readableAuthorListModel = new AuthorListModel(book);
+                bookAuthors.setModel(readableAuthorListModel);
+                EditAuthorsPanel editAuthorsPanel = new EditAuthorsPanel(readable, readableAuthorListModel);
+                addEditInfoDialog(GRIDX_END, "Edit Authors", editAuthorsPanel, "Edit", () -> {
+                    editAuthorsPanel.dispose();
+                    return null;
+                });
             } else {
                 authorListModel = new AuthorListModel();
                 bookAuthors.setModel(authorListModel);
+                addEditInfoDialog(GRIDX_END, "Add Authors", new AddNewAuthorPanel(), "Add", () -> null);
             }
             //endregion
         }
     }
 
-    private void addNewInfoDialog(int relativePosition, String title, JPanel panel) {
+    private void addEditInfoDialog(int relativePosition, String title, JPanel panel, String buttonText, Callable<Void> method) {
         constraints.gridx = relativePosition + 1;
-        JButton addButton = new JButton("Add");
-        addButton.addActionListener(e -> {
-            JDialog addNew = new JDialog((Dialog) AddNewEditPanel.this.getRootPane().getParent());
-            addNew.setTitle(title);
-            addNew.setContentPane(panel);
-            addNew.pack();
-            addNew.setLocationRelativeTo(null);
-            addNew.setVisible(true);
+        JButton button = new JButton(buttonText);
+        button.addActionListener(actionEvent -> {
+            JDialog dialog = new JDialog((Dialog) AddNewEditPanel.this.getRootPane().getParent());
+            dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+            dialog.addHierarchyListener(hierarchyEvent -> {
+                if (hierarchyEvent.getChangeFlags() == HierarchyEvent.SHOWING_CHANGED && !dialog.isShowing()) {
+                    try {
+                        method.call();
+                    } catch (Exception exception) {
+                        exception.printStackTrace();
+                    }
+                    dialog.dispose();
+                }
+            });
+            dialog.setTitle(title);
+            dialog.setContentPane(panel);
+            dialog.setResizable(false);
+            dialog.pack();
+            dialog.setLocationRelativeTo(null);
+            dialog.setVisible(true);
         });
-        add(addButton, constraints);
+        add(button, constraints);
     }
 
     private void setReadableValuesForEdit(JTextField reference) {
@@ -419,7 +474,7 @@ public class AddNewEditPanel extends JPanel {
                 var book = (Book) readable;
                 book.setISBN(isbn.getText());
                 book.setPublisher((Publisher) publisher.getSelectedItem());
-//                TODO: Book Authors need special treatment in edit
+                book.setAuthors(readableAuthorListModel.getAuthors());
             }
 
             if (readable instanceof Periodical) {
@@ -443,7 +498,43 @@ public class AddNewEditPanel extends JPanel {
         }
     }
 
-    private void newThesis() {
+    private void saveReadable(Readable readable) {
+        if (readable != null) {
+            readable.setTitle(title.getText());
+            readable.setYear(parse(year.getText()));
+            readable.setPages(parseInt(pages.getText()));
+            readable.setLendStatus(lend.isSelected());
+            readable.setSubject((Subject) subject.getSelectedItem());
+
+            if (readable instanceof Book) {
+                var book = (Book) readable;
+                book.setISBN(isbn.getText());
+                book.setPublisher((Publisher) publisher.getSelectedItem());
+                book.setAuthors(readableAuthorListModel.getAuthors());
+            }
+
+            if (readable instanceof Periodical) {
+                var periodical = (Periodical) readable;
+                periodical.setISBN(isbn.getText());
+                periodical.setPublisher((Publisher) publisher.getSelectedItem());
+                periodical.setVolume(parseInt(volume.getText()));
+                periodical.setIssue(parseInt(issue.getText()));
+            }
+
+            if (readable instanceof Thesis) {
+                var thesis = (Thesis) readable;
+                thesis.setType((ThesisType) thesisType.getSelectedItem());
+                thesis.setAuthor((Author) thesisAuthor.getSelectedItem());
+                thesis.setSupervisor((Professor) professor.getSelectedItem());
+                thesis.setUniversity(university.getText());
+                thesis.setDepartment(department.getText());
+            }
+            libraryService.notifyObservers(LibraryAction.EDIT);
+            dispose();
+        }
+    }
+
+    private void newThesis(int copies) {
         var thesis = new Thesis.Builder(
                 title.getText(),
                 parse(year.getText()),
@@ -454,13 +545,15 @@ public class AddNewEditPanel extends JPanel {
                 .withAuthor((Author) thesisAuthor.getSelectedItem())
                 .withSupervisor((Professor) professor.getSelectedItem())
                 .fromUniversity(university.getText())
-                .andDepartment(department.getText())
-                .build();
-
-        libraryService.addNewReadable(thesis);
+                .andDepartment(department.getText());
+        if (copies < 2) {
+            libraryService.addNewReadable(thesis.build());
+        } else {
+            libraryService.addMultiCopyReadable(thesis.build(copies));
+        }
     }
 
-    private void newPeriodical() {
+    private void newPeriodical(int copies) {
         var periodical = new Periodical.Builder(
                 title.getText(),
                 parse(year.getText()),
@@ -470,13 +563,15 @@ public class AddNewEditPanel extends JPanel {
                 .withISBN(isbn.getText())
                 .andPublisher((Publisher) publisher.getSelectedItem())
                 .isVolume(parseInt(volume.getText()))
-                .isIssue(parseInt(issue.getText()))
-                .build();
-
-        libraryService.addNewReadable(periodical);
+                .isIssue(parseInt(issue.getText()));
+        if (copies < 2) {
+            libraryService.addNewReadable(periodical.build());
+        } else {
+            libraryService.addMultiCopyReadable(periodical.build(copies));
+        }
     }
 
-    private void newBook() {
+    private void newBook(int copies) {
         var book = new Book.Builder(
                 title.getText(),
                 parse(year.getText()),
@@ -485,10 +580,12 @@ public class AddNewEditPanel extends JPanel {
         )
                 .withISBN(isbn.getText())
                 .andPublisher((Publisher) publisher.getSelectedItem())
-                .withAuthors(bookAuthors.getSelectedValuesList())
-                .build();
-
-        libraryService.addNewReadable(book);
+                .withAuthors(bookAuthors.getSelectedValuesList());
+        if (copies < 2) {
+            libraryService.addNewReadable(book.build());
+        } else {
+            libraryService.addMultiCopyReadable(book.build(copies));
+        }
     }
 
     private JTextField setTextField(int xPosition, Dimension size, String label, int labelRow, int textFieldRow) {

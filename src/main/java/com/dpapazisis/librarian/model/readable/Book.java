@@ -33,7 +33,7 @@ public final class Book extends Readable implements PublisherProtected {
 
     private String isbn;
     private Publisher publisher;
-    private final List<Author> authors;
+    private List<Author> authors;
 
     /**
      * Usage of the Constructor is restricted, please use the inner {@link Book.Builder} class
@@ -111,14 +111,12 @@ public final class Book extends Readable implements PublisherProtected {
     }
 
     /**
-     * Removes an {@link Author} object from the authors list
+     * Set the {@link List}<{@link Author}> for this book
      *
-     * @param author {@link Author} the object to remove
+     * @param authors {@link List}<{@link Author}> the object to remove
      */
-    public void removeAuthor(Author author) {
-        if (!authors.isEmpty()) {
-            authors.remove(author);
-        }
+    public void setAuthors(List<Author> authors) {
+        this.authors = authors;
     }
 
     /**

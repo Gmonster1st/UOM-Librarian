@@ -15,7 +15,6 @@ import com.dpapazisis.librarian.services.LibraryService;
 import javax.swing.table.AbstractTableModel;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.counting;
 import static java.util.stream.Collectors.groupingBy;
@@ -80,10 +79,10 @@ public class ReadableTableModel extends AbstractTableModel implements LibraryObs
             case 5:
                 return readable.isLend();
             case 6:
-                return library  //TODO:Filtering should be more intelligent
+                return library
                         .stream()
-                        .collect(groupingBy(Readable::getTitle, counting()))
-                        .get(readable.getTitle());
+                        .collect(groupingBy(Readable::isCopy, counting()))
+                        .get(readable.isCopy());
             default:
                 return null;
         }
@@ -99,13 +98,7 @@ public class ReadableTableModel extends AbstractTableModel implements LibraryObs
 
     private void getData() {
         this.library = libraryService.getLibrary();
-        this.libraryView = libraryService.getLibrary()
-                .stream()
-                .collect(groupingBy(Readable::getTitle))
-                .values()
-                .stream()
-                .map(l -> l.get(0))
-                .collect(Collectors.toList());
+        this.libraryView = libraryService.getLibraryGroupedByCopy();
     }
 
     @Override

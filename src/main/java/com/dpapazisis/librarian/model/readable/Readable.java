@@ -197,6 +197,10 @@ public abstract class Readable implements Serializable {
         this.copyId = copyId;
     }
 
+    public int isCopy() {
+        return Objects.hash(getTitle(), getYear(), getPages(), getSubject());
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

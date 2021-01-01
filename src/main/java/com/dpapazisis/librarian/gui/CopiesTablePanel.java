@@ -9,6 +9,7 @@ package com.dpapazisis.librarian.gui;
 
 import com.dpapazisis.librarian.gui.componentmodels.CopiesTableModel;
 import com.dpapazisis.librarian.model.readable.Readable;
+import com.dpapazisis.librarian.services.LibraryService;
 
 import javax.swing.*;
 import java.awt.*;
@@ -20,6 +21,7 @@ public class CopiesTablePanel extends JPanel {
     private JTable myTable;
     private GridBagConstraints constraints;
     private CopiesTableModel data;
+    private CopiesTableModel copiesTableModel;
 
     public CopiesTablePanel(Readable readable) {
         this.readable = readable;
@@ -38,7 +40,7 @@ public class CopiesTablePanel extends JPanel {
     }
 
     private void setMainTable() {
-        CopiesTableModel copiesTableModel = new CopiesTableModel(readable);
+        copiesTableModel = new CopiesTableModel(readable);
         data = copiesTableModel;
         data.addTableModelListener(e -> myTable.repaint());
         myTable = new JTable(data);
@@ -49,7 +51,8 @@ public class CopiesTablePanel extends JPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 JTable table = (JTable) e.getSource();
-                int row = table.getSelectedRow();
+                int viewRow = table.getSelectedRow();
+                int row = table.convertRowIndexToModel(viewRow);
                 if (e.getClickCount() == 2 && row >= 0) {
                     Readable selectedReadable = data.getReadableAt(row);
                     JPanel root = (JPanel) getParent();
@@ -72,6 +75,34 @@ public class CopiesTablePanel extends JPanel {
         scrollPane.setPreferredSize(new Dimension(400, 400));
         scrollPane.setBorder(BorderFactory.createEtchedBorder());
         this.add(scrollPane, constraints);
+
+        JButton editButton = new JButton("Edit");
+        editButton.setBounds(65, 60, 120, 30);
+        editButton.addActionListener(e -> {
+            MainWindow mainWindow = (MainWindow) Frame.getFrames()[0];
+            AddNewEditWindow editWindow = new AddNewEditWindow(mainWindow, "Edit readable");
+            var editPanel = new AddNewEditPanel(readable, false);
+            editPanel.setMultiCopyFunction(true);
+            editWindow.setContentPane(editPanel);
+            editWindow.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+            editWindow.setLocationRelativeTo(mainWindow);
+            editWindow.setVisible(true);
+        });
+
+        constraints.gridy = 1;
+        constraints.weightx = 0;
+        constraints.weighty = 0;
+        constraints.fill = GridBagConstraints.NONE;
+        this.add(editButton, constraints);
     }
-    //TODO: Adjust the edit function for multiple copies to be available in the CopiesTablePanel
+
+
+    /**
+     * Clean Up resources
+     */
+    public void clean() {
+        if (copiesTableModel != null) {
+            LibraryService.getInstance().removeObserver(copiesTableModel);
+        }
+    }
 }

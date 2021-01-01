@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 
 import static com.dpapazisis.librarian.model.readable.ThesisType.*;
 import static java.util.Map.entry;
+import static java.util.stream.Collectors.groupingBy;
 
 /**
  * The Library service class is a Singleton class that acts as the mediator between
@@ -108,6 +109,16 @@ public class LibraryService {
             return true;
         }
         return false;
+    }
+
+    public boolean addMultiCopyReadable(Set<Readable> copies) {
+        for (var readable : copies) {
+            if (!repository.addReadable(readable)) {
+                return false;
+            }
+        }
+        notifyObservers(LibraryAction.ADD_NEW);
+        return true;
     }
 
     /**
@@ -253,10 +264,22 @@ public class LibraryService {
         return count;
     }
 
+    /**
+     * Returns a {@link Set}<{@link Readable}> objects that equal to the search term
+     *
+     * @param title The full title of the Readable
+     * @return {@link Set}<{@link Readable}>
+     */
     public Set<Readable> getSearchByTitle(String title) {
         return getLibrary().stream().filter(readable -> readable.getTitle().equals(title)).collect(Collectors.toSet());
     }
 
+    /**
+     * Returns a {@link Set}<{@link Readable}> objects that contain the search term
+     *
+     * @param author the name of an author
+     * @return {@link Set}<{@link Readable}>
+     */
     public Set<Readable> getSearchByAuthor(String author) {
         var library = getLibrary()
                 .stream()
@@ -283,9 +306,29 @@ public class LibraryService {
         return results;
     }
 
+    /**
+     * Returns a {@link Set}<{@link Readable}> objects that contain the search term
+     *
+     * @param keyWord the key word in the title
+     * @return {@link Set}<{@link Readable}>
+     */
     public Set<Readable> getSearchByKeyWord(String keyWord) {
         return getLibrary().stream().filter(readable -> readable.getTitle().contains(keyWord)).collect(Collectors.toSet());
     }
 
-
+    /**
+     * Returns a {@link List}<{@link Readable}> that groups copies of a {@link Readable} in one row
+     *
+     * @return {@link List}<{@link Readable}>
+     */
+    public List<Readable> getLibraryGroupedByCopy() {
+        return getLibrary().stream()
+                .collect(groupingBy(Readable::isCopy))
+                .values()
+                .stream()
+                .map(l -> l.get(0))
+                .collect(Collectors.toList());
+    }
 }
+
+

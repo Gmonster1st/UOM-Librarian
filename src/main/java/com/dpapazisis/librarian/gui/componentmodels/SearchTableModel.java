@@ -79,10 +79,10 @@ public class SearchTableModel extends AbstractTableModel implements LibraryObser
             case 5:
                 return readable.isLend();
             case 6:
-                return library  //TODO:Filtering should be more intelligent
+                return library
                         .stream()
-                        .collect(groupingBy(Readable::getTitle, counting()))
-                        .get(readable.getTitle());
+                        .collect(groupingBy(Readable::isCopy, counting()))
+                        .get(readable.isCopy());
             default:
                 return null;
         }
@@ -100,7 +100,7 @@ public class SearchTableModel extends AbstractTableModel implements LibraryObser
         this.library = libraryService.getSearchByTitle(title);
         this.libraryView = libraryService.getSearchByTitle(title)
                 .stream()
-                .collect(groupingBy(Readable::getTitle))
+                .collect(groupingBy(Readable::isCopy))
                 .values()
                 .stream()
                 .map(l -> l.get(0))
@@ -112,7 +112,7 @@ public class SearchTableModel extends AbstractTableModel implements LibraryObser
         this.library = libraryService.getSearchByAuthor(author);
         this.libraryView = libraryService.getSearchByAuthor(author)
                 .stream()
-                .collect(groupingBy(Readable::getTitle))
+                .collect(groupingBy(Readable::isCopy))
                 .values()
                 .stream()
                 .map(l -> l.get(0))
@@ -124,7 +124,7 @@ public class SearchTableModel extends AbstractTableModel implements LibraryObser
         this.library = libraryService.getSearchByKeyWord(keyWord);
         this.libraryView = libraryService.getSearchByKeyWord(keyWord)
                 .stream()
-                .collect(groupingBy(Readable::getTitle))
+                .collect(groupingBy(Readable::isCopy))
                 .values()
                 .stream()
                 .map(l -> l.get(0))
@@ -136,7 +136,7 @@ public class SearchTableModel extends AbstractTableModel implements LibraryObser
         this.library = libraryService.getLibrary();
         this.libraryView = libraryService.getLibrary()
                 .stream()
-                .collect(groupingBy(Readable::getTitle))
+                .collect(groupingBy(Readable::isCopy))
                 .values()
                 .stream()
                 .map(l -> l.get(0))

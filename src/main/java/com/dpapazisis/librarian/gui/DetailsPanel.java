@@ -139,7 +139,7 @@ public class DetailsPanel extends JPanel {
 
             //region Create and add Authors list field and label
             JLabel authorsLabel = new JLabel("Authors:");
-            JList<Author> authors = new JList<>(new AuthorListModel(book.getAuthors()));
+            JList<Author> authors = new JList<>(new AuthorListModel(book));
             authors.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
             JScrollPane authorsScroller = new JScrollPane(authors);
             constraints.gridx = GRIDX_END;
@@ -274,7 +274,6 @@ public class DetailsPanel extends JPanel {
 
     private void dispose() {
         var parentWindow = (DetailsWindow) getRootPane().getParent();
-
         parentWindow.dispose();
     }
 

@@ -24,7 +24,7 @@ public class CopiesTableModel extends AbstractTableModel implements LibraryObser
 
     public CopiesTableModel(Readable readable) {
         super();
-        libraryService.addObserver(this); //TODO:There is a memory leak issue here to be addressed
+        libraryService.addObserver(this);
         this.readable = readable;
         getCopies();
     }
@@ -32,8 +32,8 @@ public class CopiesTableModel extends AbstractTableModel implements LibraryObser
     private void getCopies() {
         copies = libraryService.getLibrary()
                 .stream()
-                .collect(groupingBy(Readable::getTitle))
-                .get(readable.getTitle());
+                .collect(groupingBy(Readable::isCopy))
+                .get(readable.isCopy());
     }
 
     @Override
