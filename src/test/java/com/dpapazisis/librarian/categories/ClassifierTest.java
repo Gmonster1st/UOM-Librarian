@@ -49,7 +49,7 @@ public class ClassifierTest {
                 .build();
 
         assertThat(Classifier.generateDeweyCode(book),
-                is(equalTo(new DeweyCode(subject.getName(), "100.00 DIP"))));
+                is(equalTo(new DeweyCode(subject.getName(), "B-100.00 DIP"))));
     }
 
     @Test
@@ -59,7 +59,7 @@ public class ClassifierTest {
                 .build();
 
         assertThat(Classifier.generateDeweyCode(periodical),
-                is(equalTo(new DeweyCode(subject.getName(), "100.00 TEE"))));
+                is(equalTo(new DeweyCode(subject.getName(), "P-100.00 TEE"))));
     }
 
     @Test
@@ -69,7 +69,7 @@ public class ClassifierTest {
                 .build();
 
         assertThat(Classifier.generateDeweyCode(thesis),
-                is(equalTo(new DeweyCode(subject.getName(), "100.00 DIP"))));
+                is(equalTo(new DeweyCode(subject.getName(), "T-100.00 DIP"))));
     }
 
     @Test
@@ -83,7 +83,7 @@ public class ClassifierTest {
         while (magazinesIterator.hasNext()) {
             var magazine = magazinesIterator.next();
             System.out.println(magazine.getReferenceCode().toString());
-            assertThat(magazine.getReferenceCode().getCode(), is(equalTo("100.0" + i++ + " TEE")));
+            assertThat(magazine.getReferenceCode().getCode(), is(equalTo("P-100.0" + i++ + " TEE")));
         }
     }
 }
