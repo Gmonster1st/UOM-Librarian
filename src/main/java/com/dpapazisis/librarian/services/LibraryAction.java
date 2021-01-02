@@ -7,6 +7,9 @@
 
 package com.dpapazisis.librarian.services;
 
+/**
+ * Constant Actions that specify the actions for the {@link LibraryObserver}
+ */
 public enum LibraryAction {
     EDIT,
     DELETE,

@@ -25,6 +25,14 @@ public class LibraryState implements Serializable {
     private final Set<Publisher> publishers;
     private final Set<Professor> professors;
 
+    /**
+     * Constructor for the {@link LibraryState} class
+     *
+     * @param library    {@link Set}<{@link Readable}>
+     * @param authors    {@link Set}<{@link Author}>
+     * @param publishers {@link Set}<{@link Publisher}>
+     * @param professors {@link Set}<{@link Professor}>
+     */
     public LibraryState(Set<Readable> library, Set<Author> authors, Set<Publisher> publishers, Set<Professor> professors) {
         this.library = library;
         this.authors = authors;

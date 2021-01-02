@@ -21,9 +21,15 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * Static File operations
+ */
 public class FileHelper {
     private static final Path homePath = getPath();
 
+    /**
+     * @return the default Documents path of the operating system
+     */
     private static Path getPath() {
         return Paths.get(
                 FileSystemView
@@ -35,9 +41,19 @@ public class FileHelper {
 
     private static final Path libraryFilePath = resolveLibraryFilePath();
 
+    /**
+     * Hides the constructor because the class is meant to be static
+     */
     private FileHelper() {
     }
 
+    /**
+     * Loads the subject list from a csv resource file
+     *
+     * @param uri {@link String} the resource path
+     * @return {@link Set}<{@link Subject}>
+     * @throws FileNotFoundException if file is not found
+     */
     public static Set<Subject> loadCsv(String uri) throws FileNotFoundException {
         try (
                 InputStream stream = FileHelper.class.getResourceAsStream(uri);
@@ -57,6 +73,12 @@ public class FileHelper {
         throw new FileNotFoundException();
     }
 
+    /**
+     * Loads and deserializes the Library from the disk
+     *
+     * @return {@link LibraryState} object
+     * @throws FileNotFoundException if file is not found
+     */
     public static LibraryState loadFromDisk() throws FileNotFoundException {
         LibraryState library = new LibraryState(new HashSet<>(), new HashSet<>(), new HashSet<>(), new HashSet<>());
 
@@ -76,6 +98,11 @@ public class FileHelper {
         return library;
     }
 
+    /**
+     * Serializes and save the Library to disk as a binary file
+     *
+     * @param libraryState {@link LibraryState}
+     */
     public static void saveToDisk(LibraryState libraryState) {
         byte[] data = SerializationUtils.serialize(libraryState);
 
@@ -88,6 +115,11 @@ public class FileHelper {
         }
     }
 
+    /**
+     * Concat and create the subdirectory of the application
+     *
+     * @return {@link Path} the final file path
+     */
     private static Path resolveLibraryFilePath() {
         Path path = null;
         try {

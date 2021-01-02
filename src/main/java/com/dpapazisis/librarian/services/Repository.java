@@ -20,6 +20,9 @@ import java.io.Serializable;
 import java.util.Properties;
 import java.util.Set;
 
+/**
+ * Just a Repository class that is uses by the {@link LibraryService}
+ */
 class Repository implements Serializable {
     private Properties properties;
     private Set<Subject> subjects;

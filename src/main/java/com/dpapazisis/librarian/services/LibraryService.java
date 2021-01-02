@@ -101,80 +101,79 @@ public class LibraryService {
      * Adds a new {@link Readable} in the repository
      *
      * @param readable the {@link Readable} to be added
-     * @return <tt>true</tt> if the operation was successful
      */
-    public boolean addNewReadable(Readable readable) {
+    public void addNewReadable(Readable readable) {
         if (repository.addReadable(readable)) {
+            if (readable instanceof Book) {
+                updateAuthorInfo((Book) readable);
+            }
             notifyObservers(LibraryAction.ADD_NEW);
-            return true;
         }
-        return false;
     }
 
-    public boolean addMultiCopyReadable(Set<Readable> copies) {
+    /**
+     * Adds a new Set of {@link Readable} copies in the repository
+     *
+     * @param copies the {@link Set}<{@link Readable}> to be added
+     */
+    public void addMultiCopyReadable(Set<Readable> copies) {
         for (var readable : copies) {
             if (!repository.addReadable(readable)) {
-                return false;
+                return;
             }
         }
+        var readable = (Readable) copies.toArray()[0];
+        if (readable instanceof Book) {
+            updateAuthorInfo((Book) readable);
+        }
         notifyObservers(LibraryAction.ADD_NEW);
-        return true;
     }
 
     /**
      * Adds a new {@link Author} in the repository
      *
      * @param author the {@link Author} to be added
-     * @return <tt>true</tt> if the operation was successful
      */
-    public boolean addAuthor(Author author) {
+    public void addAuthor(Author author) {
         if (repository.addAuthor(author)) {
             notifyObservers(LibraryAction.ADD_NEW);
-            return true;
         }
-        return false;
     }
 
     /**
      * Adds a new {@link Publisher} in the repository
      *
      * @param publisher the {@link Publisher} to be added
-     * @return <tt>true</tt> if the operation was successful
      */
-    public boolean addPublisher(Publisher publisher) {
+    public void addPublisher(Publisher publisher) {
         if (repository.addPublisher(publisher)) {
             notifyObservers(LibraryAction.ADD_NEW);
-            return true;
         }
-        return false;
     }
 
     /**
      * Adds a new {@link Professor} in the repository
      *
      * @param professor the {@link Professor} to be added
-     * @return <tt>true</tt> if the operation was successful
      */
-    public boolean addProfessor(Professor professor) {
+    public void addProfessor(Professor professor) {
         if (repository.addProfessor(professor)) {
             notifyObservers(LibraryAction.ADD_NEW);
-            return true;
         }
-        return false;
     }
 
     /**
      * Removes a {@link Readable} object from the library
      *
      * @param readable the {@link Readable} object to remove
-     * @return <tt>true</tt> if the operation was successful
      */
-    public boolean removeReadable(Readable readable) {
+    public void removeReadable(Readable readable) {
         if (repository.removeReadable(readable)) {
+            if (readable instanceof Book) {
+                updateAuthorInfo((Book) readable);
+            }
             notifyObservers(LibraryAction.DELETE);
-            return true;
         }
-        return false;
     }
 
     /**
@@ -328,6 +327,18 @@ public class LibraryService {
                 .stream()
                 .map(l -> l.get(0))
                 .collect(Collectors.toList());
+    }
+
+    private void updateAuthorInfo(Book readable) {
+        for (var author : readable.getAuthors()) {
+            author.setNumberOfBooks(
+                    getSearchByAuthor(author.toString())
+                            .stream()
+                            .collect(groupingBy(Readable::isCopy))
+                            .size()
+            );
+            author.addPublisher(readable.getPublisher());
+        }
     }
 }
 
